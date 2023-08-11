@@ -1,55 +1,59 @@
-@extends('admin.layouts.app')
 
-@section('title')
-    {{ $module_name }}
-@endsection
 
-@section('content')
+<?php $__env->startSection('title'); ?>
+    <?php echo e($module_name); ?>
+
+<?php $__env->stopSection(); ?>
+
+<?php $__env->startSection('content'); ?>
     <!-- Content Header (Page header) -->
     <section class="content-header">
         <h1>
-            {{ $module_name }}
-            <a class="btn btn-sm btn-warning pull-right" href="{{ route(Request::segment(2) . '.create') }}"><i
-                    class="fa fa-plus"></i> @lang('Add')</a>
+            <?php echo e($module_name); ?>
+
+            <a class="btn btn-sm btn-warning pull-right" href="<?php echo e(route(Request::segment(2) . '.create')); ?>"><i
+                    class="fa fa-plus"></i> <?php echo app('translator')->get('Add'); ?></a>
         </h1>
     </section>
 
     <!-- Main content -->
     <section class="content">
-        @if (session('errorMessage'))
+        <?php if(session('errorMessage')): ?>
             <div class="alert alert-warning alert-dismissible">
                 <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                {{ session('errorMessage') }}
+                <?php echo e(session('errorMessage')); ?>
+
             </div>
-        @endif
-        @if (session('successMessage'))
+        <?php endif; ?>
+        <?php if(session('successMessage')): ?>
             <div class="alert alert-success alert-dismissible">
                 <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                {{ session('successMessage') }}
-            </div>
-        @endif
+                <?php echo e(session('successMessage')); ?>
 
-        @if ($errors->any())
+            </div>
+        <?php endif; ?>
+
+        <?php if($errors->any()): ?>
             <div class="alert alert-danger alert-dismissible">
                 <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
 
-                @foreach ($errors->all() as $error)
-                    <p>{{ $error }}</p>
-                @endforeach
+                <?php $__currentLoopData = $errors->all(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $error): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                    <p><?php echo e($error); ?></p>
+                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 
             </div>
-        @endif
+        <?php endif; ?>
 
         <div class="box box-primary">
             <div class="box-header with-border">
-                <h3 class="box-title">@lang('Update form')</h3>
+                <h3 class="box-title"><?php echo app('translator')->get('Update form'); ?></h3>
             </div>
             <!-- /.box-header -->
             <!-- form start -->
-            <form class="form-block" role="form" action="{{ route(Request::segment(2) . '.update', $detail->id) }}"
+            <form class="form-block" role="form" action="<?php echo e(route(Request::segment(2) . '.update', $detail->id)); ?>"
                 method="POST">
-                @csrf
-                @method('PUT')
+                <?php echo csrf_field(); ?>
+                <?php echo method_field('PUT'); ?>
                 <div class="box-body">
                     <!-- Custom Tabs -->
                     <div class="nav-tabs-custom">
@@ -57,7 +61,7 @@
                             <li class="active">
                                 <a href="#tab_1" data-toggle="tab">
                                     <h5>
-                                        @lang('General information')
+                                        <?php echo app('translator')->get('General information'); ?>
                                         <span class="text-danger">*</span>
                                     </h5>
                                 </a>
@@ -66,7 +70,7 @@
 
                             <button type="submit" class="btn btn-primary btn-sm pull-right">
                                 <i class="fa fa-floppy-o"></i>
-                                @lang('Save')
+                                <?php echo app('translator')->get('Save'); ?>
                             </button>
                         </ul>
 
@@ -76,228 +80,231 @@
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label>@lang('Parent element')</label>
+                                            <label><?php echo app('translator')->get('Parent element'); ?></label>
                                             <select name="parent_id" id="parent_id" class="form-control select2"
                                                 style="width: 100%">
-                                                <option value="">@lang('Please select')</option>
-                                                @foreach ($parents as $item)
-                                                    @if ($item->parent_id == 0 || $item->parent_id == null)
-                                                        <option value="{{ $item->id }}"
-                                                            {{ $detail->parent_id == $item->id ? 'selected' : '' }}>
-                                                            {{ $item->title }}</option>
+                                                <option value=""><?php echo app('translator')->get('Please select'); ?></option>
+                                                <?php $__currentLoopData = $parents; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                    <?php if($item->parent_id == 0 || $item->parent_id == null): ?>
+                                                        <option value="<?php echo e($item->id); ?>"
+                                                            <?php echo e($detail->parent_id == $item->id ? 'selected' : ''); ?>>
+                                                            <?php echo e($item->title); ?></option>
 
-                                                        @foreach ($parents as $sub)
-                                                            @if ($item->id == $sub->parent_id)
-                                                                <option value="{{ $sub->id }}"
-                                                                    {{ $detail->parent_id == $sub->id ? 'selected' : '' }}>
+                                                        <?php $__currentLoopData = $parents; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $sub): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                            <?php if($item->id == $sub->parent_id): ?>
+                                                                <option value="<?php echo e($sub->id); ?>"
+                                                                    <?php echo e($detail->parent_id == $sub->id ? 'selected' : ''); ?>>
                                                                     - -
-                                                                    {{ $sub->title }}</option>
+                                                                    <?php echo e($sub->title); ?></option>
 
-                                                                @foreach ($parents as $sub_child)
-                                                                    @if ($sub->id == $sub_child->parent_id)
-                                                                        <option value="{{ $sub_child->id }}"
-                                                                            {{ $detail->parent_id == $sub_child->id ? 'selected' : '' }}>
-                                                                            - - - - {{ $sub_child->title }}</option>
-                                                                    @endif
-                                                                @endforeach
-                                                            @endif
-                                                        @endforeach
-                                                    @endif
-                                                @endforeach
+                                                                <?php $__currentLoopData = $parents; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $sub_child): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                                    <?php if($sub->id == $sub_child->parent_id): ?>
+                                                                        <option value="<?php echo e($sub_child->id); ?>"
+                                                                            <?php echo e($detail->parent_id == $sub_child->id ? 'selected' : ''); ?>>
+                                                                            - - - - <?php echo e($sub_child->title); ?></option>
+                                                                    <?php endif; ?>
+                                                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                                            <?php endif; ?>
+                                                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                                    <?php endif; ?>
+                                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                             </select>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label>@lang('Status')</label>
+                                            <label><?php echo app('translator')->get('Status'); ?></label>
                                             <div class="form-control">
-                                                @foreach (App\Consts::STATUS as $key => $value)
+                                                <?php $__currentLoopData = App\Consts::STATUS; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $value): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                                     <label>
-                                                        <input type="radio" name="status" value="{{ $value }}"
-                                                            {{ $detail->status == $value ? 'checked' : '' }}>
-                                                        <small class="mr-15">{{ __($value) }}</small>
+                                                        <input type="radio" name="status" value="<?php echo e($value); ?>"
+                                                            <?php echo e($detail->status == $value ? 'checked' : ''); ?>>
+                                                        <small class="mr-15"><?php echo e(__($value)); ?></small>
                                                     </label>
-                                                @endforeach
+                                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label>
-                                                @lang('Title')
+                                                <?php echo app('translator')->get('Title'); ?>
                                                 <small class="text-red">*</small>
                                             </label>
                                             <input type="text" class="form-control" name="title"
-                                                placeholder="@lang('Title')"
-                                                value="{{ old('title') ?? $detail->title }}" required>
+                                                placeholder="<?php echo app('translator')->get('Title'); ?>"
+                                                value="<?php echo e(old('title') ?? $detail->title); ?>" required>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label>
-                                                @lang('Block type')
+                                                <?php echo app('translator')->get('Block type'); ?>
                                                 <small class="text-red">*</small>
                                             </label>
                                             <select name="block_code" id="block_code" class="form-control select2"
                                                 style="width: 100%" required>
-                                                <option value="">@lang('Please select')</option>
-                                                @foreach ($blocks as $item)
-                                                    <option value="{{ $item->block_code }}"
-                                                        {{ $item->block_code == $detail->block_code ? 'selected' : '' }}>
-                                                        {{ $item->name }}
+                                                <option value=""><?php echo app('translator')->get('Please select'); ?></option>
+                                                <?php $__currentLoopData = $blocks; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                    <option value="<?php echo e($item->block_code); ?>"
+                                                        <?php echo e($item->block_code == $detail->block_code ? 'selected' : ''); ?>>
+                                                        <?php echo e($item->name); ?>
+
                                                     </option>
-                                                @endforeach
+                                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                             </select>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label>@lang('Layout')</label>
+                                            <label><?php echo app('translator')->get('Layout'); ?></label>
                                             <select name="json_params[layout]" id="block_layout"
                                                 class="form-control select2" style="width: 100%">
-                                                <option value="">@lang('Please select')</option>
-                                                @foreach ($blocks as $item)
-                                                    @if ($item->block_code == $detail->block_code)
-                                                        @php
+                                                <option value=""><?php echo app('translator')->get('Please select'); ?></option>
+                                                <?php $__currentLoopData = $blocks; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                    <?php if($item->block_code == $detail->block_code): ?>
+                                                        <?php
                                                             $json_params = json_decode($item->json_params);
-                                                        @endphp
-                                                        @isset($json_params->layout)
-                                                            @foreach ($json_params->layout as $name => $value)
-                                                                <option value="{{ $value }}"
-                                                                    {{ isset($detail->json_params->layout) && $value == $detail->json_params->layout ? 'selected' : '' }}>
-                                                                    {{ __($value) }}
+                                                        ?>
+                                                        <?php if(isset($json_params->layout)): ?>
+                                                            <?php $__currentLoopData = $json_params->layout; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $name => $value): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                                <option value="<?php echo e($value); ?>"
+                                                                    <?php echo e(isset($detail->json_params->layout) && $value == $detail->json_params->layout ? 'selected' : ''); ?>>
+                                                                    <?php echo e(__($value)); ?>
+
                                                                 </option>
-                                                            @endforeach
-                                                        @endisset
-                                                    @endif
-                                                @endforeach
+                                                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                                        <?php endif; ?>
+                                                    <?php endif; ?>
+                                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                             </select>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label>@lang('Style')</label>
+                                            <label><?php echo app('translator')->get('Style'); ?></label>
                                             <select name="json_params[style]" id="block_style" class="form-control select2"
                                                 style="width: 100%">
-                                                <option value="">@lang('Please select')</option>
-                                                @foreach ($blocks as $item)
-                                                    @if ($item->block_code == $detail->block_code)
-                                                        @php
+                                                <option value=""><?php echo app('translator')->get('Please select'); ?></option>
+                                                <?php $__currentLoopData = $blocks; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                    <?php if($item->block_code == $detail->block_code): ?>
+                                                        <?php
                                                             $json_params = json_decode($item->json_params);
-                                                        @endphp
-                                                        @isset($json_params->style)
-                                                            @foreach ($json_params->style as $name => $value)
-                                                                <option value="{{ $value }}"
-                                                                    {{ isset($detail->json_params->style) && $value == $detail->json_params->style ? 'selected' : '' }}>
-                                                                    {{ __($value) }}
+                                                        ?>
+                                                        <?php if(isset($json_params->style)): ?>
+                                                            <?php $__currentLoopData = $json_params->style; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $name => $value): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                                <option value="<?php echo e($value); ?>"
+                                                                    <?php echo e(isset($detail->json_params->style) && $value == $detail->json_params->style ? 'selected' : ''); ?>>
+                                                                    <?php echo e(__($value)); ?>
+
                                                                 </option>
-                                                            @endforeach
-                                                        @endisset
-                                                    @endif
-                                                @endforeach
+                                                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                                        <?php endif; ?>
+                                                    <?php endif; ?>
+                                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                             </select>
                                         </div>
                                     </div>
 
                                     <div class="col-md-12">
                                         <div class="form-group">
-                                            <label>@lang('Brief')</label>
-                                            <textarea name="brief" id="brief" class="form-control" rows="5">{{ old('brief') ?? $detail->brief }}</textarea>
+                                            <label><?php echo app('translator')->get('Brief'); ?></label>
+                                            <textarea name="brief" id="brief" class="form-control" rows="5"><?php echo e(old('brief') ?? $detail->brief); ?></textarea>
                                         </div>
                                     </div>
                                     <div class="col-md-12">
                                         <div class="form-group">
-                                            <label>@lang('Content')</label>
-                                            <textarea name="content" id="content" class="form-control" rows="5">{{ old('content') ?? $detail->content }}</textarea>
+                                            <label><?php echo app('translator')->get('Content'); ?></label>
+                                            <textarea name="content" id="content" class="form-control" rows="5"><?php echo e(old('content') ?? $detail->content); ?></textarea>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label>@lang('Url redirect')</label>
+                                            <label><?php echo app('translator')->get('Url redirect'); ?></label>
                                             <input type="text" class="form-control" name="url_link"
-                                                placeholder="@lang('Url redirect')"
-                                                value="{{ old('url_link') ?? $detail->url_link }}">
+                                                placeholder="<?php echo app('translator')->get('Url redirect'); ?>"
+                                                value="<?php echo e(old('url_link') ?? $detail->url_link); ?>">
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label>@lang('Url redirect title')</label>
+                                            <label><?php echo app('translator')->get('Url redirect title'); ?></label>
                                             <input type="text" class="form-control" name="url_link_title"
-                                                placeholder="@lang('Url redirect title')"
-                                                value="{{ old('url_link_title') ?? $detail->url_link_title }}">
+                                                placeholder="<?php echo app('translator')->get('Url redirect title'); ?>"
+                                                value="<?php echo e(old('url_link_title') ?? $detail->url_link_title); ?>">
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label>@lang('Order')</label>
+                                            <label><?php echo app('translator')->get('Order'); ?></label>
                                             <input type="number" class="form-control" name="iorder"
-                                                placeholder="@lang('Order')"
-                                                value="{{ old('iorder') ?? $detail->iorder }}">
+                                                placeholder="<?php echo app('translator')->get('Order'); ?>"
+                                                value="<?php echo e(old('iorder') ?? $detail->iorder); ?>">
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label>@lang('Icon')</label>
+                                            <label><?php echo app('translator')->get('Icon'); ?></label>
                                             <input type="text" class="form-control" name="icon"
                                                 placeholder="Ex: fa fa-folder"
-                                                value="{{ old('icon') ?? $detail->icon }}">
+                                                value="<?php echo e(old('icon') ?? $detail->icon); ?>">
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label>@lang('Button')</label>
+                                            <label><?php echo app('translator')->get('Button'); ?></label>
                                             <input type="text" class="form-control" name="button"
-                                                placeholder="@lang('Button')"
-                                                value="{{ old('icon') ?? $detail->button }}">
+                                                placeholder="<?php echo app('translator')->get('Button'); ?>"
+                                                value="<?php echo e(old('icon') ?? $detail->button); ?>">
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label>@lang('Url button')</label>
+                                            <label><?php echo app('translator')->get('Url button'); ?></label>
                                             <input type="text" class="form-control" name="url_link_button"
-                                                placeholder="@lang('Url button')"
-                                                value="{{ old('url_link_button') ?? $detail->url_link_button }}">
+                                                placeholder="<?php echo app('translator')->get('Url button'); ?>"
+                                                value="<?php echo e(old('url_link_button') ?? $detail->url_link_button); ?>">
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label>@lang('Image')</label>
+                                            <label><?php echo app('translator')->get('Image'); ?></label>
                                             <div class="input-group">
                                                 <span class="input-group-btn">
                                                     <a data-input="image" data-preview="image-holder"
                                                         class="btn btn-primary lfm" data-type="cms-image">
-                                                        <i class="fa fa-picture-o"></i> @lang('Select')
+                                                        <i class="fa fa-picture-o"></i> <?php echo app('translator')->get('Select'); ?>
                                                     </a>
                                                 </span>
                                                 <input id="image" class="form-control" type="text" name="image"
-                                                    placeholder="@lang('Image source')" value="{{ $detail->image }}">
+                                                    placeholder="<?php echo app('translator')->get('Image source'); ?>" value="<?php echo e($detail->image); ?>">
                                             </div>
                                             <div id="image-holder" style="margin-top:15px;max-height:100px;">
-                                                @if ($detail->image != '')
-                                                    <img style="height: 5rem;" src="{{ $detail->image }}">
-                                                @endif
+                                                <?php if($detail->image != ''): ?>
+                                                    <img style="height: 5rem;" src="<?php echo e($detail->image); ?>">
+                                                <?php endif; ?>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label>@lang('Background image')</label>
+                                            <label><?php echo app('translator')->get('Background image'); ?></label>
                                             <div class="input-group">
                                                 <span class="input-group-btn">
                                                     <a data-input="image_background"
                                                         data-preview="image_background-holder" data-type="cms-image"
                                                         class="btn btn-primary lfm">
-                                                        <i class="fa fa-picture-o"></i> @lang('Select')
+                                                        <i class="fa fa-picture-o"></i> <?php echo app('translator')->get('Select'); ?>
                                                     </a>
                                                 </span>
                                                 <input id="image_background" class="form-control" type="text"
-                                                    name="image_background" placeholder="@lang('Image source')"
-                                                    value="{{ $detail->image_background }}">
+                                                    name="image_background" placeholder="<?php echo app('translator')->get('Image source'); ?>"
+                                                    value="<?php echo e($detail->image_background); ?>">
                                             </div>
                                             <div id="image_background-holder" style="margin-top:15px;max-height:100px;">
-                                                @if ($detail->image_background != '')
-                                                    <img style="height: 5rem;" src="{{ $detail->image_background }}">
-                                                @endif
+                                                <?php if($detail->image_background != ''): ?>
+                                                    <img style="height: 5rem;" src="<?php echo e($detail->image_background); ?>">
+                                                <?php endif; ?>
                                             </div>
                                         </div>
                                     </div>
@@ -310,11 +317,11 @@
                 </div>
 
                 <div class="box-footer">
-                    <a class="btn btn-success btn-sm" href="{{ route(Request::segment(2) . '.index') }}">
-                        <i class="fa fa-bars"></i> @lang('List')
+                    <a class="btn btn-success btn-sm" href="<?php echo e(route(Request::segment(2) . '.index')); ?>">
+                        <i class="fa fa-bars"></i> <?php echo app('translator')->get('List'); ?>
                     </a>
                     <button type="submit" class="btn btn-primary pull-right btn-sm"><i class="fa fa-floppy-o"></i>
-                        @lang('Save')</button>
+                        <?php echo app('translator')->get('Save'); ?></button>
                 </div>
             </form>
         </div>
@@ -326,129 +333,129 @@
             <div class="col-lg-6 mt-10">
                 <div class="box box-primary">
                     <div class="box-header with-border">
-                        <h3 class="box-title">@lang('Add link')</h3>
+                        <h3 class="box-title"><?php echo app('translator')->get('Add link'); ?></h3>
                     </div>
                     <div class="box-body">
                         <div class="the-box ">
-                            <form action="{{ route(Request::segment(2) . '.store') }}" method="POST" id="form-main"
+                            <form action="<?php echo e(route(Request::segment(2) . '.store')); ?>" method="POST" id="form-main"
                                 enctype="multipart/form-data">
-                                @csrf
-                                @method('POST')
-                                <input type="hidden" name="parent_id" value="{{ $detail->id }}">
-                                <input type="hidden" name="block_code" value="{{ $detail->block_code }}">
-                                @if (Request::get('lang') != '' && Request::get('lang') != $languageDefault->lang_locale)
-                                    <input type="hidden" name="lang" value="{{ Request::get('lang') }}">
-                                @endif
+                                <?php echo csrf_field(); ?>
+                                <?php echo method_field('POST'); ?>
+                                <input type="hidden" name="parent_id" value="<?php echo e($detail->id); ?>">
+                                <input type="hidden" name="block_code" value="<?php echo e($detail->block_code); ?>">
+                                <?php if(Request::get('lang') != '' && Request::get('lang') != $languageDefault->lang_locale): ?>
+                                    <input type="hidden" name="lang" value="<?php echo e(Request::get('lang')); ?>">
+                                <?php endif; ?>
                                 <div class="d-flex-wap">
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label>
-                                                @lang('Title')
+                                                <?php echo app('translator')->get('Title'); ?>
                                                 <small class="text-red">*</small>
                                             </label>
                                             <input type="text" class="form-control" name="title"
-                                                placeholder="@lang('Title')" value="{{ old('title') ?? '' }}"
+                                                placeholder="<?php echo app('translator')->get('Title'); ?>" value="<?php echo e(old('title') ?? ''); ?>"
                                                 required>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label>@lang('Status')</label>
+                                            <label><?php echo app('translator')->get('Status'); ?></label>
                                             <div class="form-control">
-                                                @foreach (App\Consts::STATUS as $key => $value)
+                                                <?php $__currentLoopData = App\Consts::STATUS; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $value): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                                     <label>
-                                                        <input type="radio" name="status" value="{{ $value }}"
-                                                            {{ $loop->index == 0 ? 'checked' : '' }}>
-                                                        <small class="mr-15">{{ __($value) }}</small>
+                                                        <input type="radio" name="status" value="<?php echo e($value); ?>"
+                                                            <?php echo e($loop->index == 0 ? 'checked' : ''); ?>>
+                                                        <small class="mr-15"><?php echo e(__($value)); ?></small>
                                                     </label>
-                                                @endforeach
+                                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                             </div>
                                         </div>
                                     </div>
 
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label>@lang('Brief')</label>
-                                            <textarea name="brief" class="form-control" rows="5">{{ old('brief') ?? '' }}</textarea>
+                                            <label><?php echo app('translator')->get('Brief'); ?></label>
+                                            <textarea name="brief" class="form-control" rows="5"><?php echo e(old('brief') ?? ''); ?></textarea>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label>@lang('Content')</label>
-                                            <textarea name="content" class="form-control" rows="5">{{ old('content') ?? '' }}</textarea>
+                                            <label><?php echo app('translator')->get('Content'); ?></label>
+                                            <textarea name="content" class="form-control" rows="5"><?php echo e(old('content') ?? ''); ?></textarea>
                                         </div>
                                     </div>
 
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label>@lang('Url redirect')</label>
+                                            <label><?php echo app('translator')->get('Url redirect'); ?></label>
                                             <input type="text" class="form-control" name="url_link"
-                                                placeholder="@lang('Url redirect')" value="{{ old('url_link') ?? '' }}">
+                                                placeholder="<?php echo app('translator')->get('Url redirect'); ?>" value="<?php echo e(old('url_link') ?? ''); ?>">
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label>@lang('Url redirect title')</label>
+                                            <label><?php echo app('translator')->get('Url redirect title'); ?></label>
                                             <input type="text" class="form-control" name="url_link_title"
-                                                placeholder="@lang('Url redirect title')"
-                                                value="{{ old('url_link_title') ?? '' }}">
+                                                placeholder="<?php echo app('translator')->get('Url redirect title'); ?>"
+                                                value="<?php echo e(old('url_link_title') ?? ''); ?>">
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label>@lang('Icon')</label>
+                                            <label><?php echo app('translator')->get('Icon'); ?></label>
                                             <input type="text" class="form-control" name="icon"
-                                                placeholder="Ex: fa fa-folder" value="{{ old('icon') }}">
+                                                placeholder="Ex: fa fa-folder" value="<?php echo e(old('icon')); ?>">
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label>@lang('Video')</label>
+                                            <label><?php echo app('translator')->get('Video'); ?></label>
                                             <input type="text" class="form-control" name="json_params[video]"
-                                                placeholder="" value="{{ old('json_params[video]') }}">
+                                                placeholder="" value="<?php echo e(old('json_params[video]')); ?>">
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label>@lang('Image')</label>
+                                            <label><?php echo app('translator')->get('Image'); ?></label>
                                             <div class="input-group">
                                                 <span class="input-group-btn">
                                                     <a data-input="image_child" data-preview="image-holder_child"
                                                         class="btn btn-primary lfm" data-type="cms-image">
                                                         <i class="fa fa-picture-o"></i>
-                                                        @lang('Select')
+                                                        <?php echo app('translator')->get('Select'); ?>
                                                     </a>
                                                 </span>
                                                 <input id="image_child" class="form-control" type="text"
-                                                    name="image" placeholder="@lang('Image source')">
+                                                    name="image" placeholder="<?php echo app('translator')->get('Image source'); ?>">
                                             </div>
                                             <div id="image-holder_child" style="margin-top:15px;max-height:100px;">
-                                                @if (old('image') != '')
-                                                    <img style="height: 5rem;" src="{{ old('image_child') }}">
-                                                @endif
+                                                <?php if(old('image') != ''): ?>
+                                                    <img style="height: 5rem;" src="<?php echo e(old('image_child')); ?>">
+                                                <?php endif; ?>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label>@lang('Background image')</label>
+                                            <label><?php echo app('translator')->get('Background image'); ?></label>
                                             <div class="input-group">
                                                 <span class="input-group-btn">
                                                     <a data-input="image_background_child"
                                                         data-preview="image_background-holder_child" data-type="cms-image"
                                                         class="btn btn-primary lfm">
                                                         <i class="fa fa-picture-o"></i>
-                                                        @lang('Select')
+                                                        <?php echo app('translator')->get('Select'); ?>
                                                     </a>
                                                 </span>
                                                 <input id="image_background_child" class="form-control" type="text"
-                                                    name="image_background" placeholder="@lang('Image source')">
+                                                    name="image_background" placeholder="<?php echo app('translator')->get('Image source'); ?>">
                                             </div>
                                             <div id="image_background-holder_child"
                                                 style="margin-top:15px;max-height:100px;">
-                                                @if (old('image_background') != '')
-                                                    <img style="height: 5rem;" src="{{ old('image_background_child') }}">
-                                                @endif
+                                                <?php if(old('image_background') != ''): ?>
+                                                    <img style="height: 5rem;" src="<?php echo e(old('image_background_child')); ?>">
+                                                <?php endif; ?>
                                             </div>
                                         </div>
                                     </div>
@@ -458,7 +465,7 @@
                                         <div class="btn-group btn-group-devided">
                                             <button type="submit" class="btn btn-primary btn-sm pull-right">
                                                 <i class="fa fa-floppy-o"></i>
-                                                @lang('Save')
+                                                <?php echo app('translator')->get('Save'); ?>
                                             </button>
                                         </div>
                                     </div>
@@ -470,28 +477,28 @@
                 </div>
 
             </div>
-            @if (isset($child) && count($child) > 0)
+            <?php if(isset($child) && count($child) > 0): ?>
                 <div class="col-md-6 mt-10">
                     <div class="box box-primary">
                         <div class="box-header with-border">
                             <h3 class="box-title">
-                                @lang('Block structure')
+                                <?php echo app('translator')->get('Block structure'); ?>
                             </h3>
                         </div>
                         <div class="box-body">
                             <div class="table-responsive">
                                 <div class="dd" id="menu-sort">
                                     <ol class="dd-list">
-                                        @foreach ($child as $item)
-                                            <li class="dd-item dd3-item " data-id="{{ $item->id }}">
+                                        <?php $__currentLoopData = $child; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                            <li class="dd-item dd3-item " data-id="<?php echo e($item->id); ?>">
                                                 <div class="dd-handle dd3-handle"></div>
                                                 <div class="dd3-content">
                                                     <span class="text float-start"
-                                                        data-update="title">{{ $item->title }}</span>
-                                                    <span class="text float-end">@lang($item->status)</span>
-                                                    <a data-toggle="collapse" href="#item-details-{{ $item->id }}"
+                                                        data-update="title"><?php echo e($item->title); ?></span>
+                                                    <span class="text float-end"><?php echo app('translator')->get($item->status); ?></span>
+                                                    <a data-toggle="collapse" href="#item-details-<?php echo e($item->id); ?>"
                                                         role="button" aria-expanded="false"
-                                                        aria-controls="item-details-{{ $item->id }}"
+                                                        aria-controls="item-details-<?php echo e($item->id); ?>"
                                                         class="show-item-details">
                                                         <i class="fa fa-angle-down"></i>
                                                     </a>
@@ -499,14 +506,14 @@
                                                 </div>
 
                                                 <div class="item-details collapse multi-collapse form-block"
-                                                    id="item-details-{{ $item->id }}">
+                                                    id="item-details-<?php echo e($item->id); ?>">
                                                     <form role="form"
-                                                        action="{{ route(Request::segment(2) . '.update', $item->id) }}"
+                                                        action="<?php echo e(route(Request::segment(2) . '.update', $item->id)); ?>"
                                                         method="POST">
-                                                        @csrf
-                                                        @method('PUT')
+                                                        <?php echo csrf_field(); ?>
+                                                        <?php echo method_field('PUT'); ?>
                                                         <input type="hidden" name="block_code"
-                                                            value="{{ $detail->block_code }}">
+                                                            value="<?php echo e($detail->block_code); ?>">
                                                         <div class="box-body">
                                                             <div class="nav-tabs-custom">
                                                                 <div class="tab-content">
@@ -515,145 +522,145 @@
                                                                             <div class="col-md-6">
                                                                                 <div class="form-group">
                                                                                     <label>
-                                                                                        @lang('Title')
+                                                                                        <?php echo app('translator')->get('Title'); ?>
                                                                                         <small class="text-red">*</small>
                                                                                     </label>
                                                                                     <input type="text"
                                                                                         class="form-control"
                                                                                         name="title"
-                                                                                        placeholder="@lang('Title')"
-                                                                                        value="{{ old('title') ?? $item->title }}"
+                                                                                        placeholder="<?php echo app('translator')->get('Title'); ?>"
+                                                                                        value="<?php echo e(old('title') ?? $item->title); ?>"
                                                                                         required>
                                                                                 </div>
                                                                             </div>
                                                                             <div class="col-md-6">
                                                                                 <div class="form-group">
-                                                                                    <label>@lang('Status')</label>
+                                                                                    <label><?php echo app('translator')->get('Status'); ?></label>
                                                                                     <div class="form-control">
-                                                                                        @foreach (App\Consts::STATUS as $key => $value)
+                                                                                        <?php $__currentLoopData = App\Consts::STATUS; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $value): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                                                                             <label>
                                                                                                 <input type="radio"
                                                                                                     name="status"
-                                                                                                    value="{{ $value }}"
-                                                                                                    {{ $item->status == $value ? 'checked' : '' }}>
+                                                                                                    value="<?php echo e($value); ?>"
+                                                                                                    <?php echo e($item->status == $value ? 'checked' : ''); ?>>
                                                                                                 <small
-                                                                                                    class="mr-15">{{ __($value) }}</small>
+                                                                                                    class="mr-15"><?php echo e(__($value)); ?></small>
                                                                                             </label>
-                                                                                        @endforeach
+                                                                                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                                                                     </div>
                                                                                 </div>
                                                                             </div>
                                                                             <div class="col-md-6">
                                                                                 <div class="form-group">
-                                                                                    <label>@lang('Brief')</label>
-                                                                                    <textarea name="brief" id="brief" class="form-control" rows="5">{{ old('brief') ?? $item->brief }}</textarea>
+                                                                                    <label><?php echo app('translator')->get('Brief'); ?></label>
+                                                                                    <textarea name="brief" id="brief" class="form-control" rows="5"><?php echo e(old('brief') ?? $item->brief); ?></textarea>
                                                                                 </div>
                                                                             </div>
                                                                             <div class="col-md-6">
                                                                                 <div class="form-group">
-                                                                                    <label>@lang('Content')</label>
-                                                                                    <textarea name="content" id="content" class="form-control" rows="5">{{ old('content') ?? $item->content }}</textarea>
+                                                                                    <label><?php echo app('translator')->get('Content'); ?></label>
+                                                                                    <textarea name="content" id="content" class="form-control" rows="5"><?php echo e(old('content') ?? $item->content); ?></textarea>
                                                                                 </div>
                                                                             </div>
                                                                             <div class="col-md-6">
                                                                                 <div class="form-group">
-                                                                                    <label>@lang('Url redirect')</label>
+                                                                                    <label><?php echo app('translator')->get('Url redirect'); ?></label>
                                                                                     <input type="text"
                                                                                         class="form-control"
                                                                                         name="url_link"
-                                                                                        placeholder="@lang('Url redirect')"
-                                                                                        value="{{ old('url_link') ?? $item->url_link }}">
+                                                                                        placeholder="<?php echo app('translator')->get('Url redirect'); ?>"
+                                                                                        value="<?php echo e(old('url_link') ?? $item->url_link); ?>">
                                                                                 </div>
                                                                             </div>
                                                                             <div class="col-md-6">
                                                                                 <div class="form-group">
-                                                                                    <label>@lang('Url redirect title')</label>
+                                                                                    <label><?php echo app('translator')->get('Url redirect title'); ?></label>
                                                                                     <input type="text"
                                                                                         class="form-control"
                                                                                         name="url_link_title"
-                                                                                        placeholder="@lang('Url redirect title')"
-                                                                                        value="{{ old('url_link_title') ?? $item->url_link_title }}">
+                                                                                        placeholder="<?php echo app('translator')->get('Url redirect title'); ?>"
+                                                                                        value="<?php echo e(old('url_link_title') ?? $item->url_link_title); ?>">
                                                                                 </div>
                                                                             </div>
 
                                                                             <div class="col-md-6">
                                                                                 <div class="form-group">
-                                                                                    <label>@lang('Icon')</label>
+                                                                                    <label><?php echo app('translator')->get('Icon'); ?></label>
                                                                                     <input type="text"
                                                                                         class="form-control"
                                                                                         name="icon"
                                                                                         placeholder="Ex: fa fa-folder"
-                                                                                        value="{{ old('icon') ?? $item->icon }}">
+                                                                                        value="<?php echo e(old('icon') ?? $item->icon); ?>">
                                                                                 </div>
                                                                             </div>
                                                                             <div class="col-md-6">
                                                                                 <div class="form-group">
-                                                                                    <label>@lang('Video')</label>
+                                                                                    <label><?php echo app('translator')->get('Video'); ?></label>
                                                                                     <input type="text"
                                                                                         class="form-control"
                                                                                         name="json_params[video]"
                                                                                         placeholder=""
-                                                                                        value="{{ old('json_params[video]') ?? ($item->json_params->video ?? '') }}">
+                                                                                        value="<?php echo e(old('json_params[video]') ?? ($item->json_params->video ?? '')); ?>">
                                                                                 </div>
                                                                             </div>
                                                                             <div class="col-md-6">
                                                                                 <div class="form-group">
-                                                                                    <label>@lang('Image')</label>
+                                                                                    <label><?php echo app('translator')->get('Image'); ?></label>
                                                                                     <div class="input-group">
                                                                                         <span class="input-group-btn">
-                                                                                            <a data-input="image-{{ $item->id }}"
-                                                                                                data-preview="image-holder-{{ $item->id }}"
+                                                                                            <a data-input="image-<?php echo e($item->id); ?>"
+                                                                                                data-preview="image-holder-<?php echo e($item->id); ?>"
                                                                                                 class="btn btn-primary lfm"
                                                                                                 data-type="cms-image">
                                                                                                 <i
                                                                                                     class="fa fa-picture-o"></i>
-                                                                                                @lang('Select')
+                                                                                                <?php echo app('translator')->get('Select'); ?>
                                                                                             </a>
                                                                                         </span>
                                                                                         <input
-                                                                                            id="image-{{ $item->id }}"
+                                                                                            id="image-<?php echo e($item->id); ?>"
                                                                                             class="form-control"
                                                                                             type="text" name="image"
-                                                                                            placeholder="@lang('Image source')"
-                                                                                            value="{{ $item->image }}">
+                                                                                            placeholder="<?php echo app('translator')->get('Image source'); ?>"
+                                                                                            value="<?php echo e($item->image); ?>">
                                                                                     </div>
-                                                                                    <div id="image-holder-{{ $item->id }}"
+                                                                                    <div id="image-holder-<?php echo e($item->id); ?>"
                                                                                         style="margin-top:15px;max-height:100px;">
-                                                                                        @if ($item->image != '')
+                                                                                        <?php if($item->image != ''): ?>
                                                                                             <img style="height: 5rem;"
-                                                                                                src="{{ $item->image }}">
-                                                                                        @endif
+                                                                                                src="<?php echo e($item->image); ?>">
+                                                                                        <?php endif; ?>
                                                                                     </div>
                                                                                 </div>
                                                                             </div>
                                                                             <div class="col-md-6">
                                                                                 <div class="form-group">
-                                                                                    <label>@lang('Background image')</label>
+                                                                                    <label><?php echo app('translator')->get('Background image'); ?></label>
                                                                                     <div class="input-group">
                                                                                         <span class="input-group-btn">
-                                                                                            <a data-input="image_background-{{ $item->id }}"
-                                                                                                data-preview="image_background-holder-{{ $item->id }}"
+                                                                                            <a data-input="image_background-<?php echo e($item->id); ?>"
+                                                                                                data-preview="image_background-holder-<?php echo e($item->id); ?>"
                                                                                                 data-type="cms-image"
                                                                                                 class="btn btn-primary lfm">
                                                                                                 <i
                                                                                                     class="fa fa-picture-o"></i>
-                                                                                                @lang('Select')
+                                                                                                <?php echo app('translator')->get('Select'); ?>
                                                                                             </a>
                                                                                         </span>
                                                                                         <input
-                                                                                            id="image_background-{{ $item->id }}"
+                                                                                            id="image_background-<?php echo e($item->id); ?>"
                                                                                             class="form-control"
                                                                                             type="text"
                                                                                             name="image_background"
-                                                                                            placeholder="@lang('Image source')"
-                                                                                            value="{{ $item->image_background }}">
+                                                                                            placeholder="<?php echo app('translator')->get('Image source'); ?>"
+                                                                                            value="<?php echo e($item->image_background); ?>">
                                                                                     </div>
-                                                                                    <div id="image_background-holder-{{ $item->id }}"
+                                                                                    <div id="image_background-holder-<?php echo e($item->id); ?>"
                                                                                         style="margin-top:15px;max-height:100px;">
-                                                                                        @if ($item->image_background != '')
+                                                                                        <?php if($item->image_background != ''): ?>
                                                                                             <img style="height: 5rem;"
-                                                                                                src="{{ $item->image_background }}">
-                                                                                        @endif
+                                                                                                src="<?php echo e($item->image_background); ?>">
+                                                                                        <?php endif; ?>
                                                                                     </div>
                                                                                 </div>
                                                                             </div>
@@ -666,47 +673,47 @@
                                                         <div class="text-end mt-2">
 
                                                             <button
-                                                                class="btn btn-primary btn-sm">@lang('Save')</button>
+                                                                class="btn btn-primary btn-sm"><?php echo app('translator')->get('Save'); ?></button>
                                                             <a class="btn btn-danger  btn-sm"
-                                                                onclick="return confirm('@lang('confirm_action')')"
-                                                                href="{{ route(Request::segment(2) . '.destroy', $item->id) }}">
-                                                                @lang('Delete')</a>
+                                                                onclick="return confirm('<?php echo app('translator')->get('confirm_action'); ?>')"
+                                                                href="<?php echo e(route(Request::segment(2) . '.destroy', $item->id)); ?>">
+                                                                <?php echo app('translator')->get('Delete'); ?></a>
                                                         </div>
                                                     </form>
                                                     <form
-                                                        action="{{ route(Request::segment(2) . '.destroy', $item->id) }}"
-                                                        method="POST" onsubmit="return confirm('@lang('confirm_action')')">
-                                                        @csrf
-                                                        @method('DELETE')
+                                                        action="<?php echo e(route(Request::segment(2) . '.destroy', $item->id)); ?>"
+                                                        method="POST" onsubmit="return confirm('<?php echo app('translator')->get('confirm_action'); ?>')">
+                                                        <?php echo csrf_field(); ?>
+                                                        <?php echo method_field('DELETE'); ?>
                                                         <button style="position: absolute;bottom: 10px;left: 80px;"
-                                                            class="btn btn-danger  btn-sm">@lang('Delete')</button>
+                                                            class="btn btn-danger  btn-sm"><?php echo app('translator')->get('Delete'); ?></button>
                                                     </form>
                                                 </div>
                                                 <div class="clearfix"></div>
-                                                @php $count_sub=0; @endphp
+                                                <?php $count_sub=0; ?>
 
-                                                @foreach ($parents_child as $item_sub_1)
-                                                    @if ($item_sub_1->parent_id == $item->id)
-                                                        @php $count_sub++; @endphp
-                                                    @endif
-                                                @endforeach
-                                                @if ($count_sub > 0)
+                                                <?php $__currentLoopData = $parents_child; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item_sub_1): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                    <?php if($item_sub_1->parent_id == $item->id): ?>
+                                                        <?php $count_sub++; ?>
+                                                    <?php endif; ?>
+                                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                                <?php if($count_sub > 0): ?>
                                                     <ol class="dd-list">
-                                                        @foreach ($parents_child as $item_sub_1)
-                                                            @if ($item_sub_1->parent_id == $item->id)
+                                                        <?php $__currentLoopData = $parents_child; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item_sub_1): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                            <?php if($item_sub_1->parent_id == $item->id): ?>
                                                                 <li class="dd-item dd3-item"
-                                                                    data-id="{{ $item_sub_1->id }}">
+                                                                    data-id="<?php echo e($item_sub_1->id); ?>">
                                                                     <div class="dd-handle dd3-handle">
                                                                     </div>
                                                                     <div class="dd3-content">
                                                                         <span class="text float-start"
-                                                                            data-update="title">{{ $item_sub_1->title }}</span>
+                                                                            data-update="title"><?php echo e($item_sub_1->title); ?></span>
                                                                         <span
-                                                                            class="text float-end">@lang($status[$item_sub_1->status])</span>
+                                                                            class="text float-end"><?php echo app('translator')->get($status[$item_sub_1->status]); ?></span>
                                                                         <a data-toggle="collapse"
-                                                                            href="#item-details-{{ $item_sub_1->id }}"
+                                                                            href="#item-details-<?php echo e($item_sub_1->id); ?>"
                                                                             role="button" aria-expanded="false"
-                                                                            aria-controls="item-details-{{ $item_sub_1->id }}"
+                                                                            aria-controls="item-details-<?php echo e($item_sub_1->id); ?>"
                                                                             class="show-item-details">
                                                                             <i class="fa fa-angle-down"></i>
                                                                         </a>
@@ -714,12 +721,12 @@
                                                                         </div>
                                                                     </div>
                                                                     <div class="item-details collapse multi-collapse"
-                                                                        id="item-details-{{ $item_sub_1->id }}">
+                                                                        id="item-details-<?php echo e($item_sub_1->id); ?>">
                                                                         <form role="form"
-                                                                            action="{{ route(Request::segment(2) . '.update', $item_sub_1->id) }}"
+                                                                            action="<?php echo e(route(Request::segment(2) . '.update', $item_sub_1->id)); ?>"
                                                                             method="POST">
-                                                                            @csrf
-                                                                            @method('PUT')
+                                                                            <?php echo csrf_field(); ?>
+                                                                            <?php echo method_field('PUT'); ?>
                                                                             <div class="box-body">
                                                                                 <div class="nav-tabs-custom">
                                                                                     <div class="tab-content">
@@ -729,7 +736,7 @@
                                                                                                 <div class="col-md-6">
                                                                                                     <div
                                                                                                         class="form-group">
-                                                                                                        <label>@lang('Parent element')</label>
+                                                                                                        <label><?php echo app('translator')->get('Parent element'); ?></label>
                                                                                                         <select
                                                                                                             name="parent_id"
                                                                                                             id="parent_id"
@@ -737,79 +744,82 @@
                                                                                                             style="width: 100%">
                                                                                                             <option
                                                                                                                 value="">
-                                                                                                                @lang('Please select')
+                                                                                                                <?php echo app('translator')->get('Please select'); ?>
                                                                                                             </option>
 
-                                                                                                            @foreach ($parents_child as $item_child)
-                                                                                                                @if ($item_child->parent_id == 0 || $item_child->parent_id == null)
-                                                                                                                    @php
+                                                                                                            <?php $__currentLoopData = $parents_child; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item_child): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                                                                                <?php if($item_child->parent_id == 0 || $item_child->parent_id == null): ?>
+                                                                                                                    <?php
                                                                                                                         if ($item_child->id == $item->id) {
                                                                                                                             continue;
                                                                                                                         }
-                                                                                                                    @endphp
+                                                                                                                    ?>
                                                                                                                     <option
-                                                                                                                        value="{{ $item_child->id }}"
-                                                                                                                        {{ $item_sub_1->parent_id == $item_child->id ? 'selected' : '' }}>
-                                                                                                                        {{ $item_child->title }}
+                                                                                                                        value="<?php echo e($item_child->id); ?>"
+                                                                                                                        <?php echo e($item_sub_1->parent_id == $item_child->id ? 'selected' : ''); ?>>
+                                                                                                                        <?php echo e($item_child->title); ?>
+
                                                                                                                     </option>
 
-                                                                                                                    @foreach ($parents as $sub)
-                                                                                                                        @if ($item_child->id == $sub->parent_id)
-                                                                                                                            @php
+                                                                                                                    <?php $__currentLoopData = $parents; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $sub): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                                                                                        <?php if($item_child->id == $sub->parent_id): ?>
+                                                                                                                            <?php
                                                                                                                                 if ($sub->id == $item_sub_1->id) {
                                                                                                                                     continue;
                                                                                                                                 }
-                                                                                                                            @endphp
+                                                                                                                            ?>
                                                                                                                             <option
-                                                                                                                                value="{{ $sub->id }}"
-                                                                                                                                {{ $item_sub_1->parent_id == $sub->id ? 'selected' : '' }}>
+                                                                                                                                value="<?php echo e($sub->id); ?>"
+                                                                                                                                <?php echo e($item_sub_1->parent_id == $sub->id ? 'selected' : ''); ?>>
                                                                                                                                 -
                                                                                                                                 -
-                                                                                                                                {{ $sub->title }}
+                                                                                                                                <?php echo e($sub->title); ?>
+
                                                                                                                             </option>
 
-                                                                                                                            @foreach ($parents as $sub_child)
-                                                                                                                                @if ($sub->id == $sub_child->parent_id)
-                                                                                                                                    @php
+                                                                                                                            <?php $__currentLoopData = $parents; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $sub_child): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                                                                                                <?php if($sub->id == $sub_child->parent_id): ?>
+                                                                                                                                    <?php
                                                                                                                                         if ($sub_child->id == $item_sub_1->id) {
                                                                                                                                             continue;
                                                                                                                                         }
-                                                                                                                                    @endphp
+                                                                                                                                    ?>
                                                                                                                                     <option
-                                                                                                                                        value="{{ $sub_child->id }}"
-                                                                                                                                        {{ $item_sub_1->parent_id == $sub_child->id ? 'selected' : '' }}>
+                                                                                                                                        value="<?php echo e($sub_child->id); ?>"
+                                                                                                                                        <?php echo e($item_sub_1->parent_id == $sub_child->id ? 'selected' : ''); ?>>
                                                                                                                                         -
                                                                                                                                         -
                                                                                                                                         -
                                                                                                                                         -
-                                                                                                                                        {{ $sub_child->title }}
+                                                                                                                                        <?php echo e($sub_child->title); ?>
+
                                                                                                                                     </option>
-                                                                                                                                @endif
-                                                                                                                            @endforeach
-                                                                                                                        @endif
-                                                                                                                    @endforeach
-                                                                                                                @endif
-                                                                                                            @endforeach
+                                                                                                                                <?php endif; ?>
+                                                                                                                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                                                                                                        <?php endif; ?>
+                                                                                                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                                                                                                <?php endif; ?>
+                                                                                                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                                                                                         </select>
                                                                                                     </div>
                                                                                                 </div>
                                                                                                 <div class="col-md-6">
                                                                                                     <div
                                                                                                         class="form-group">
-                                                                                                        <label>@lang('Status')</label>
+                                                                                                        <label><?php echo app('translator')->get('Status'); ?></label>
                                                                                                         <div
                                                                                                             class="form-control">
-                                                                                                            @foreach (App\Consts::STATUS as $key => $value)
+                                                                                                            <?php $__currentLoopData = App\Consts::STATUS; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $value): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                                                                                                 <label>
                                                                                                                     <input
                                                                                                                         type="radio"
                                                                                                                         name="status"
-                                                                                                                        value="{{ $value }}"
-                                                                                                                        {{ $item_sub_1->status == $value ? 'checked' : '' }}>
+                                                                                                                        value="<?php echo e($value); ?>"
+                                                                                                                        <?php echo e($item_sub_1->status == $value ? 'checked' : ''); ?>>
                                                                                                                     <small
-                                                                                                                        class="mr-15">{{ __($value) }}</small>
+                                                                                                                        class="mr-15"><?php echo e(__($value)); ?></small>
                                                                                                                 </label>
-                                                                                                            @endforeach
+                                                                                                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                                                                                         </div>
                                                                                                     </div>
                                                                                                 </div>
@@ -817,7 +827,7 @@
                                                                                                     <div
                                                                                                         class="form-group">
                                                                                                         <label>
-                                                                                                            @lang('Title')
+                                                                                                            <?php echo app('translator')->get('Title'); ?>
                                                                                                             <small
                                                                                                                 class="text-red">*</small>
                                                                                                         </label>
@@ -825,8 +835,8 @@
                                                                                                             type="text"
                                                                                                             class="form-control"
                                                                                                             name="title"
-                                                                                                            placeholder="@lang('Title')"
-                                                                                                            value="{{ old('title') ?? $item_sub_1->title }}"
+                                                                                                            placeholder="<?php echo app('translator')->get('Title'); ?>"
+                                                                                                            value="<?php echo e(old('title') ?? $item_sub_1->title); ?>"
                                                                                                             required>
                                                                                                     </div>
                                                                                                 </div>
@@ -834,7 +844,7 @@
                                                                                                     <div
                                                                                                         class="form-group">
                                                                                                         <label>
-                                                                                                            @lang('Block type')
+                                                                                                            <?php echo app('translator')->get('Block type'); ?>
                                                                                                             <small
                                                                                                                 class="text-red">*</small>
                                                                                                         </label>
@@ -846,22 +856,23 @@
                                                                                                             required>
                                                                                                             <option
                                                                                                                 value="">
-                                                                                                                @lang('Please select')
+                                                                                                                <?php echo app('translator')->get('Please select'); ?>
                                                                                                             </option>
-                                                                                                            @foreach ($blocks as $block)
+                                                                                                            <?php $__currentLoopData = $blocks; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $block): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                                                                                                 <option
-                                                                                                                    value="{{ $block->block_code }}"
-                                                                                                                    {{ $block->block_code == $item_sub_1->block_code ? 'selected' : '' }}>
-                                                                                                                    {{ $block->name }}
+                                                                                                                    value="<?php echo e($block->block_code); ?>"
+                                                                                                                    <?php echo e($block->block_code == $item_sub_1->block_code ? 'selected' : ''); ?>>
+                                                                                                                    <?php echo e($block->name); ?>
+
                                                                                                                 </option>
-                                                                                                            @endforeach
+                                                                                                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                                                                                         </select>
                                                                                                     </div>
                                                                                                 </div>
                                                                                                 <div class="col-md-6">
                                                                                                     <div
                                                                                                         class="form-group">
-                                                                                                        <label>@lang('Layout')</label>
+                                                                                                        <label><?php echo app('translator')->get('Layout'); ?></label>
                                                                                                         <select
                                                                                                             name="json_params[layout]"
                                                                                                             id="block_layout"
@@ -869,31 +880,32 @@
                                                                                                             style="width: 100%">
                                                                                                             <option
                                                                                                                 value="">
-                                                                                                                @lang('Please select')
+                                                                                                                <?php echo app('translator')->get('Please select'); ?>
                                                                                                             </option>
-                                                                                                            @foreach ($blocks as $block)
-                                                                                                                @if ($block->block_code == $item_sub_1->block_code)
-                                                                                                                    @php
+                                                                                                            <?php $__currentLoopData = $blocks; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $block): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                                                                                <?php if($block->block_code == $item_sub_1->block_code): ?>
+                                                                                                                    <?php
                                                                                                                         $json_params = json_decode($block->json_params);
-                                                                                                                    @endphp
-                                                                                                                    @isset($json_params->layout)
-                                                                                                                        @foreach ($json_params->layout as $name => $value)
+                                                                                                                    ?>
+                                                                                                                    <?php if(isset($json_params->layout)): ?>
+                                                                                                                        <?php $__currentLoopData = $json_params->layout; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $name => $value): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                                                                                                             <option
-                                                                                                                                value="{{ $value }}"
-                                                                                                                                {{ isset($item_sub_1->json_params->layout) && $value == $item_sub_1->json_params->layout ? 'selected' : '' }}>
-                                                                                                                                {{ __($value) }}
+                                                                                                                                value="<?php echo e($value); ?>"
+                                                                                                                                <?php echo e(isset($item_sub_1->json_params->layout) && $value == $item_sub_1->json_params->layout ? 'selected' : ''); ?>>
+                                                                                                                                <?php echo e(__($value)); ?>
+
                                                                                                                             </option>
-                                                                                                                        @endforeach
-                                                                                                                    @endisset
-                                                                                                                @endif
-                                                                                                            @endforeach
+                                                                                                                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                                                                                                    <?php endif; ?>
+                                                                                                                <?php endif; ?>
+                                                                                                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                                                                                         </select>
                                                                                                     </div>
                                                                                                 </div>
                                                                                                 <div class="col-md-6">
                                                                                                     <div
                                                                                                         class="form-group">
-                                                                                                        <label>@lang('Style')</label>
+                                                                                                        <label><?php echo app('translator')->get('Style'); ?></label>
                                                                                                         <select
                                                                                                             name="json_params[style]"
                                                                                                             id="block_style"
@@ -901,24 +913,25 @@
                                                                                                             style="width: 100%">
                                                                                                             <option
                                                                                                                 value="">
-                                                                                                                @lang('Please select')
+                                                                                                                <?php echo app('translator')->get('Please select'); ?>
                                                                                                             </option>
-                                                                                                            @foreach ($blocks as $block)
-                                                                                                                @if ($block->block_code == $detail->block_code)
-                                                                                                                    @php
+                                                                                                            <?php $__currentLoopData = $blocks; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $block): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                                                                                <?php if($block->block_code == $detail->block_code): ?>
+                                                                                                                    <?php
                                                                                                                         $json_params = json_decode($block->json_params);
-                                                                                                                    @endphp
-                                                                                                                    @isset($json_params->style)
-                                                                                                                        @foreach ($json_params->style as $name => $value)
+                                                                                                                    ?>
+                                                                                                                    <?php if(isset($json_params->style)): ?>
+                                                                                                                        <?php $__currentLoopData = $json_params->style; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $name => $value): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                                                                                                             <option
-                                                                                                                                value="{{ $value }}"
-                                                                                                                                {{ isset($item_sub_1->json_params->style) && $value == $item_sub_1->json_params->style ? 'selected' : '' }}>
-                                                                                                                                {{ __($value) }}
+                                                                                                                                value="<?php echo e($value); ?>"
+                                                                                                                                <?php echo e(isset($item_sub_1->json_params->style) && $value == $item_sub_1->json_params->style ? 'selected' : ''); ?>>
+                                                                                                                                <?php echo e(__($value)); ?>
+
                                                                                                                             </option>
-                                                                                                                        @endforeach
-                                                                                                                    @endisset
-                                                                                                                @endif
-                                                                                                            @endforeach
+                                                                                                                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                                                                                                    <?php endif; ?>
+                                                                                                                <?php endif; ?>
+                                                                                                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                                                                                         </select>
                                                                                                     </div>
                                                                                                 </div>
@@ -926,131 +939,131 @@
                                                                                                 <div class="col-md-6">
                                                                                                     <div
                                                                                                         class="form-group">
-                                                                                                        <label>@lang('Brief')</label>
-                                                                                                        <textarea name="brief"  class="form-control" rows="5">{{ old('brief') ?? $item->brief }}</textarea>
+                                                                                                        <label><?php echo app('translator')->get('Brief'); ?></label>
+                                                                                                        <textarea name="brief"  class="form-control" rows="5"><?php echo e(old('brief') ?? $item->brief); ?></textarea>
 
                                                                                                     </div>
                                                                                                 </div>
                                                                                                 <div class="col-md-6">
                                                                                                     <div
                                                                                                         class="form-group">
-                                                                                                        <label>@lang('Content')</label>
-                                                                                                        <textarea name="content"  class="form-control" rows="5">{{ old('content') ?? $item_sub_1->content }}</textarea>
+                                                                                                        <label><?php echo app('translator')->get('Content'); ?></label>
+                                                                                                        <textarea name="content"  class="form-control" rows="5"><?php echo e(old('content') ?? $item_sub_1->content); ?></textarea>
 
                                                                                                     </div>
                                                                                                 </div>
                                                                                                 <div class="col-md-6">
                                                                                                     <div
                                                                                                         class="form-group">
-                                                                                                        <label>@lang('Url redirect')</label>
+                                                                                                        <label><?php echo app('translator')->get('Url redirect'); ?></label>
                                                                                                         <input
                                                                                                             type="text"
                                                                                                             class="form-control"
                                                                                                             name="url_link"
-                                                                                                            placeholder="@lang('Url redirect')"
-                                                                                                            value="{{ old('url_link') ?? $item_sub_1->url_link }}">
+                                                                                                            placeholder="<?php echo app('translator')->get('Url redirect'); ?>"
+                                                                                                            value="<?php echo e(old('url_link') ?? $item_sub_1->url_link); ?>">
                                                                                                     </div>
                                                                                                 </div>
                                                                                                 <div class="col-md-6">
                                                                                                     <div
                                                                                                         class="form-group">
-                                                                                                        <label>@lang('Url redirect title')</label>
+                                                                                                        <label><?php echo app('translator')->get('Url redirect title'); ?></label>
                                                                                                         <input
                                                                                                             type="text"
                                                                                                             class="form-control"
                                                                                                             name="url_link_title"
-                                                                                                            placeholder="@lang('Url redirect title')"
-                                                                                                            value="{{ old('url_link_title') ?? $item_sub_1->url_link_title }}">
+                                                                                                            placeholder="<?php echo app('translator')->get('Url redirect title'); ?>"
+                                                                                                            value="<?php echo e(old('url_link_title') ?? $item_sub_1->url_link_title); ?>">
                                                                                                     </div>
                                                                                                 </div>
                                                                                                 <div class="col-md-6">
                                                                                                     <div
                                                                                                         class="form-group">
-                                                                                                        <label>@lang('Icon')</label>
+                                                                                                        <label><?php echo app('translator')->get('Icon'); ?></label>
                                                                                                         <input
                                                                                                             type="text"
                                                                                                             class="form-control"
                                                                                                             name="icon"
                                                                                                             placeholder="Ex: fa fa-folder"
-                                                                                                            value="{{ old('icon') ?? $item_sub_1->icon }}">
+                                                                                                            value="<?php echo e(old('icon') ?? $item_sub_1->icon); ?>">
                                                                                                     </div>
                                                                                                 </div>
                                                                                                 <div class="col-md-6">
                                                                                                     <div class="form-group">
-                                                                                                        <label>@lang('Video')</label>
+                                                                                                        <label><?php echo app('translator')->get('Video'); ?></label>
                                                                                                         <input type="text"
                                                                                                             class="form-control"
                                                                                                             name="json_params[video]"
                                                                                                             placeholder=""
-                                                                                                            value="{{ old('json_params[video]') ?? ($item_sub_1->json_params->video ?? '') }}">
+                                                                                                            value="<?php echo e(old('json_params[video]') ?? ($item_sub_1->json_params->video ?? '')); ?>">
                                                                                                     </div>
                                                                                                 </div>
                                                                                                 
                                                                                                 <div class="col-md-6">
                                                                                                     <div
                                                                                                         class="form-group">
-                                                                                                        <label>@lang('Image')</label>
+                                                                                                        <label><?php echo app('translator')->get('Image'); ?></label>
                                                                                                         <div
                                                                                                             class="input-group">
                                                                                                             <span
                                                                                                                 class="input-group-btn">
-                                                                                                                <a data-input="image-{{ $item_sub_1->id }}"
-                                                                                                                    data-preview="image-holder-{{ $item_sub_1->id }}"
+                                                                                                                <a data-input="image-<?php echo e($item_sub_1->id); ?>"
+                                                                                                                    data-preview="image-holder-<?php echo e($item_sub_1->id); ?>"
                                                                                                                     class="btn btn-primary lfm"
                                                                                                                     data-type="cms-image">
                                                                                                                     <i
                                                                                                                         class="fa fa-picture-o"></i>
-                                                                                                                    @lang('Select')
+                                                                                                                    <?php echo app('translator')->get('Select'); ?>
                                                                                                                 </a>
                                                                                                             </span>
                                                                                                             <input
-                                                                                                                id="image-{{ $item_sub_1->id }}"
+                                                                                                                id="image-<?php echo e($item_sub_1->id); ?>"
                                                                                                                 class="form-control"
                                                                                                                 type="text"
                                                                                                                 name="image"
-                                                                                                                placeholder="@lang('Image source')"
-                                                                                                                value="{{ $item_sub_1->image }}">
+                                                                                                                placeholder="<?php echo app('translator')->get('Image source'); ?>"
+                                                                                                                value="<?php echo e($item_sub_1->image); ?>">
                                                                                                         </div>
-                                                                                                        <div id="image-holder-{{ $item_sub_1->id }}"
+                                                                                                        <div id="image-holder-<?php echo e($item_sub_1->id); ?>"
                                                                                                             style="margin-top:15px;max-height:100px;">
-                                                                                                            @if ($item_sub_1->image != '')
+                                                                                                            <?php if($item_sub_1->image != ''): ?>
                                                                                                                 <img style="height: 5rem;"
-                                                                                                                    src="{{ $item_sub_1->image }}">
-                                                                                                            @endif
+                                                                                                                    src="<?php echo e($item_sub_1->image); ?>">
+                                                                                                            <?php endif; ?>
                                                                                                         </div>
                                                                                                     </div>
                                                                                                 </div>
                                                                                                 <div class="col-md-6">
                                                                                                     <div
                                                                                                         class="form-group">
-                                                                                                        <label>@lang('Background image')</label>
+                                                                                                        <label><?php echo app('translator')->get('Background image'); ?></label>
                                                                                                         <div
                                                                                                             class="input-group">
                                                                                                             <span
                                                                                                                 class="input-group-btn">
-                                                                                                                <a data-input="image_background-{{ $item_sub_1->id }}"
-                                                                                                                    data-preview="image_background-holder-{{ $item_sub_1->id }}"
+                                                                                                                <a data-input="image_background-<?php echo e($item_sub_1->id); ?>"
+                                                                                                                    data-preview="image_background-holder-<?php echo e($item_sub_1->id); ?>"
                                                                                                                     data-type="cms-image"
                                                                                                                     class="btn btn-primary lfm">
                                                                                                                     <i
                                                                                                                         class="fa fa-picture-o"></i>
-                                                                                                                    @lang('Select')
+                                                                                                                    <?php echo app('translator')->get('Select'); ?>
                                                                                                                 </a>
                                                                                                             </span>
                                                                                                             <input
-                                                                                                                id="image_background-{{ $item_sub_1->id }}"
+                                                                                                                id="image_background-<?php echo e($item_sub_1->id); ?>"
                                                                                                                 class="form-control"
                                                                                                                 type="text"
                                                                                                                 name="image_background"
-                                                                                                                placeholder="@lang('Image source')"
-                                                                                                                value="{{ $item_sub_1->image_background }}">
+                                                                                                                placeholder="<?php echo app('translator')->get('Image source'); ?>"
+                                                                                                                value="<?php echo e($item_sub_1->image_background); ?>">
                                                                                                         </div>
-                                                                                                        <div id="image_background-holder-{{ $item_sub_1->id }}"
+                                                                                                        <div id="image_background-holder-<?php echo e($item_sub_1->id); ?>"
                                                                                                             style="margin-top:15px;max-height:100px;">
-                                                                                                            @if ($item_sub_1->image_background != '')
+                                                                                                            <?php if($item_sub_1->image_background != ''): ?>
                                                                                                                 <img style="height: 5rem;"
-                                                                                                                    src="{{ $item_sub_1->image_background }}">
-                                                                                                            @endif
+                                                                                                                    src="<?php echo e($item_sub_1->image_background); ?>">
+                                                                                                            <?php endif; ?>
                                                                                                         </div>
                                                                                                     </div>
                                                                                                 </div>
@@ -1062,47 +1075,47 @@
                                                                             <div class="clearfix"></div>
                                                                             <div class="text-end mt-2">
                                                                                 <button
-                                                                                    class="btn btn-primary btn-sm">@lang('Save')</button>
+                                                                                    class="btn btn-primary btn-sm"><?php echo app('translator')->get('Save'); ?></button>
                                                                             </div>
                                                                         </form>
                                                                         <form
-                                                                            action="{{ route(Request::segment(2) . '.destroy', $item_sub_1->id) }}"
+                                                                            action="<?php echo e(route(Request::segment(2) . '.destroy', $item_sub_1->id)); ?>"
                                                                             method="POST"
-                                                                            onsubmit="return confirm('@lang('confirm_action')')">
-                                                                            @csrf
-                                                                            @method('DELETE')
+                                                                            onsubmit="return confirm('<?php echo app('translator')->get('confirm_action'); ?>')">
+                                                                            <?php echo csrf_field(); ?>
+                                                                            <?php echo method_field('DELETE'); ?>
                                                                             <button
                                                                                 style="position: absolute;bottom: 10px;left: 80px;"
-                                                                                class="btn btn-danger  btn-sm">@lang('Delete')</button>
+                                                                                class="btn btn-danger  btn-sm"><?php echo app('translator')->get('Delete'); ?></button>
                                                                         </form>
                                                                     </div>
                                                                     <div class="clearfix"></div>
                                                                 </li>
-                                                            @endif
-                                                        @endforeach
+                                                            <?php endif; ?>
+                                                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                                     </ol>
-                                                @endif
+                                                <?php endif; ?>
                                             </li>
-                                        @endforeach
+                                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                     </ol>
                                 </div>
                             </div>
                         </div>
                         <div class="box-footer">
-                            <a class="btn btn-warning btn-flat menu-sort-save btn-sm" title="@lang('Save')">
+                            <a class="btn btn-warning btn-flat menu-sort-save btn-sm" title="<?php echo app('translator')->get('Save'); ?>">
                                 <i class="fa fa-floppy-o"></i>
-                                @lang('Save sort')
+                                <?php echo app('translator')->get('Save sort'); ?>
                             </a>
                         </div>
                     </div>
                 </div>
-            @endif
+            <?php endif; ?>
         </div>
 
     </section>
-@endsection
+<?php $__env->stopSection(); ?>
 
-@section('script')
+<?php $__env->startSection('script'); ?>
     <script>
         CKEDITOR.replace('content', ck_options);
 
@@ -1113,7 +1126,7 @@
                 var _targetStyle = $(this).parents('.form-block').find('#block_style');
                 _targetLayout.html('');
                 _targetStyle.html('');
-                var url = "{{ route('blocks.params') }}/";
+                var url = "<?php echo e(route('blocks.params')); ?>/";
                 $.ajax({
                     type: "GET",
                     url: url,
@@ -1121,8 +1134,8 @@
                         "block_code": block_code,
                     },
                     success: function(response) {
-                        var _optionListLayout = '<option value="">@lang('Please select')</option>';
-                        var _optionListStyle = '<option value="">@lang('Please select')</option>';
+                        var _optionListLayout = '<option value=""><?php echo app('translator')->get('Please select'); ?></option>';
+                        var _optionListStyle = '<option value=""><?php echo app('translator')->get('Please select'); ?></option>';
                         if (response.data != null) {
                             let json_params = JSON.parse(response.data);
                             if (json_params.hasOwnProperty('layout')) {
@@ -1159,13 +1172,14 @@
             let serialize = $('#menu-sort').nestable('serialize');
             let menu = JSON.stringify(serialize);
             $.ajax({
-                    url: '{{ route('blocks.update_sort') }}',
+                    url: '<?php echo e(route('blocks.update_sort')); ?>',
                     type: 'POST',
                     dataType: 'json',
                     data: {
-                        _token: '{{ csrf_token() }}',
+                        _token: '<?php echo e(csrf_token()); ?>',
                         menu: menu,
-                        root_id: {{ $detail->id }}
+                        root_id: <?php echo e($detail->id); ?>
+
                     },
                 })
                 .done(function(data) {
@@ -1179,4 +1193,6 @@
                 });
         });
     </script>
-@endsection
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('admin.layouts.app', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH D:\FHM\FHM-AutoCar-BE\resources\views/admin/pages/block_contents/edit/banner.blade.php ENDPATH**/ ?>

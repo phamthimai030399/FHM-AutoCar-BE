@@ -91,6 +91,18 @@
                         value="{{ $detail->iorder }}">
                     </div>
                     <div class="form-group">
+                      <label>@lang('Url redirect')</label>
+                      <input type="text" class="form-control" name="json_params[url_link]"
+                          placeholder="@lang('Url redirect')"
+                          value="{{ isset($detail->json_params->url_link) ? $detail->json_params->url_link : old('json_params[url_link]') }}">
+                  </div>
+                  <div class="form-group">
+                      <label>@lang('Url redirect title')</label>
+                      <input type="text" class="form-control" name="json_params[url_link_title]"
+                          placeholder="@lang('Url redirect title')"
+                          value="{{ isset($detail->json_params->url_link_title) ? $detail->json_params->url_link_title : old('json_params[url_link_title]') }}">
+                  </div>
+                    <div class="form-group">
                       <label>@lang('Image')</label>
                       <div class="input-group">
                         <span class="input-group-btn">

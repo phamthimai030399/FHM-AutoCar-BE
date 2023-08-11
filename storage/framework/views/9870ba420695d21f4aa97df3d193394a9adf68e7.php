@@ -1,54 +1,58 @@
-@extends('admin.layouts.app')
 
-@section('title')
-    {{ $module_name }}
-@endsection
 
-@section('content')
+<?php $__env->startSection('title'); ?>
+    <?php echo e($module_name); ?>
+
+<?php $__env->stopSection(); ?>
+
+<?php $__env->startSection('content'); ?>
     <!-- Content Header (Page header) -->
     <section class="content-header">
         <h1>
-            {{ $module_name }}
-            <a class="btn btn-sm btn-warning pull-right" href="{{ route(Request::segment(2) . '.create') }}"><i
-                    class="fa fa-plus"></i> @lang('Add')</a>
+            <?php echo e($module_name); ?>
+
+            <a class="btn btn-sm btn-warning pull-right" href="<?php echo e(route(Request::segment(2) . '.create')); ?>"><i
+                    class="fa fa-plus"></i> <?php echo app('translator')->get('Add'); ?></a>
         </h1>
     </section>
 
     <!-- Main content -->
     <section class="content">
-        @if (session('errorMessage'))
+        <?php if(session('errorMessage')): ?>
             <div class="alert alert-warning alert-dismissible">
                 <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                {{ session('errorMessage') }}
+                <?php echo e(session('errorMessage')); ?>
+
             </div>
-        @endif
-        @if (session('successMessage'))
+        <?php endif; ?>
+        <?php if(session('successMessage')): ?>
             <div class="alert alert-success alert-dismissible">
                 <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                {{ session('successMessage') }}
-            </div>
-        @endif
+                <?php echo e(session('successMessage')); ?>
 
-        @if ($errors->any())
+            </div>
+        <?php endif; ?>
+
+        <?php if($errors->any()): ?>
             <div class="alert alert-danger alert-dismissible">
                 <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
 
-                @foreach ($errors->all() as $error)
-                    <p>{{ $error }}</p>
-                @endforeach
+                <?php $__currentLoopData = $errors->all(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $error): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                    <p><?php echo e($error); ?></p>
+                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 
             </div>
-        @endif
+        <?php endif; ?>
 
         <div class="box box-primary">
             <div class="box-header with-border">
-                <h3 class="box-title">@lang('Update form')</h3>
+                <h3 class="box-title"><?php echo app('translator')->get('Update form'); ?></h3>
             </div>
             <!-- /.box-header -->
             <!-- form start -->
-            <form role="form" action="{{ route(Request::segment(2) . '.update', $detail->id) }}" method="POST">
-                @csrf
-                @method('PUT')
+            <form role="form" action="<?php echo e(route(Request::segment(2) . '.update', $detail->id)); ?>" method="POST">
+                <?php echo csrf_field(); ?>
+                <?php echo method_field('PUT'); ?>
                 <div class="box-body">
                     <!-- Custom Tabs -->
                     <div class="nav-tabs-custom">
@@ -58,19 +62,11 @@
                                     <h5>Thông tin chính <span class="text-danger">*</span></h5>
                                 </a>
                             </li>
-                            {{-- <li>
-                                <a href="#tab_2" data-toggle="tab">
-                                    <h5>@lang('Gallery Image')</h5>
-                                </a>
-                            </li> --}}
-                            {{-- <li>
-                                <a href="#tab_3" data-toggle="tab">
-                                    <h5>@lang('Related Products')</h5>
-                                </a>
-                            </li> --}}
+                            
+                            
                             <button type="submit" class="btn btn-primary btn-sm pull-right">
                                 <i class="fa fa-floppy-o"></i>
-                                @lang('Save')
+                                <?php echo app('translator')->get('Save'); ?>
                             </button>
                         </ul>
 
@@ -79,61 +75,62 @@
                                 <div class="d-flex flex-wrap">
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label>@lang('Product category') <small class="text-red">*</small></label>
+                                            <label><?php echo app('translator')->get('Product category'); ?> <small class="text-red">*</small></label>
                                             <select name="taxonomy_id" id="taxonomy_id" class="form-control select2"
                                                 style="width:100%">
-                                                <option value="">@lang('Please select')</option>
-                                                @foreach ($parents as $item)
-                                                    @if ($item->parent_id == 0 || $item->parent_id == null)
-                                                        <option value="{{ $item->id }}"
-                                                            {{ $detail->taxonomy_id == $item->id ? 'selected' : '' }}>
-                                                            {{ $item->title }}</option>
+                                                <option value=""><?php echo app('translator')->get('Please select'); ?></option>
+                                                <?php $__currentLoopData = $parents; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                    <?php if($item->parent_id == 0 || $item->parent_id == null): ?>
+                                                        <option value="<?php echo e($item->id); ?>"
+                                                            <?php echo e($detail->taxonomy_id == $item->id ? 'selected' : ''); ?>>
+                                                            <?php echo e($item->title); ?></option>
 
-                                                        @foreach ($parents as $sub)
-                                                            @if ($item->id == $sub->parent_id)
-                                                                <option value="{{ $sub->id }}"
-                                                                    {{ $detail->taxonomy_id == $sub->id ? 'selected' : '' }}>
-                                                                    - - {{ $sub->title }}
+                                                        <?php $__currentLoopData = $parents; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $sub): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                            <?php if($item->id == $sub->parent_id): ?>
+                                                                <option value="<?php echo e($sub->id); ?>"
+                                                                    <?php echo e($detail->taxonomy_id == $sub->id ? 'selected' : ''); ?>>
+                                                                    - - <?php echo e($sub->title); ?>
+
                                                                 </option>
 
-                                                                @foreach ($parents as $sub_child)
-                                                                    @if ($sub->id == $sub_child->parent_id)
-                                                                        <option value="{{ $sub_child->id }}"
-                                                                            {{ $detail->taxonomy_id == $sub_child->id ? 'selected' : '' }}>
+                                                                <?php $__currentLoopData = $parents; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $sub_child): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                                    <?php if($sub->id == $sub_child->parent_id): ?>
+                                                                        <option value="<?php echo e($sub_child->id); ?>"
+                                                                            <?php echo e($detail->taxonomy_id == $sub_child->id ? 'selected' : ''); ?>>
                                                                             - - - -
-                                                                            {{ $sub_child->title }}</option>
-                                                                    @endif
-                                                                @endforeach
-                                                            @endif
-                                                        @endforeach
-                                                    @endif
-                                                @endforeach
+                                                                            <?php echo e($sub_child->title); ?></option>
+                                                                    <?php endif; ?>
+                                                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                                            <?php endif; ?>
+                                                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                                    <?php endif; ?>
+                                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                             </select>
 
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label>@lang('Title') <small class="text-red">*</small></label>
+                                            <label><?php echo app('translator')->get('Title'); ?> <small class="text-red">*</small></label>
                                             <input type="text" class="form-control" name="title"
-                                                placeholder="@lang('Title')" value="{{ $detail->title }}" required>
+                                                placeholder="<?php echo app('translator')->get('Title'); ?>" value="<?php echo e($detail->title); ?>" required>
                                         </div>
                                     </div>
 
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label>@lang('Price')</label>
+                                            <label><?php echo app('translator')->get('Price'); ?></label>
                                                     <input type="text" class="form-control" name="json_params[price_old]"
-                                                        placeholder="@lang('Price')"
-                                                        value="{{ $detail->json_params->price_old ?? old('json_params[price_old]') }}">
+                                                        placeholder="<?php echo app('translator')->get('Price'); ?>"
+                                                        value="<?php echo e($detail->json_params->price_old ?? old('json_params[price_old]')); ?>">
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label>@lang('Discount price')</label>
+                                            <label><?php echo app('translator')->get('Discount price'); ?></label>
                                                     <input type="text" class="form-control" name="json_params[price]"
-                                                        placeholder="@lang('Discount price')"
-                                                        value="{{ $detail->json_params->price ?? old('json_params[price]') }}">
+                                                        placeholder="<?php echo app('translator')->get('Discount price'); ?>"
+                                                        value="<?php echo e($detail->json_params->price ?? old('json_params[price]')); ?>">
                                         </div>
                                     </div>
 
@@ -147,24 +144,25 @@
                                                 Maximum 100 characters in the group: "A-Z", "a-z", "0-9" and "-_" )
                                             </small>
                                             <input name="alias" class="form-control"
-                                                value="{{ $detail->alias ?? old('alias') }}" />
+                                                value="<?php echo e($detail->alias ?? old('alias')); ?>" />
                                         </div>
                                     </div>
                                     
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label>@lang('Status')</label>
+                                            <label><?php echo app('translator')->get('Status'); ?></label>
                                             <div class="form-control">
                                                 <label>
                                                     <input type="radio" name="status" value="active"
-                                                        {{ $detail->status == 'active' ? 'checked' : '' }}>
-                                                    <small>@lang('active')</small>
+                                                        <?php echo e($detail->status == 'active' ? 'checked' : ''); ?>>
+                                                    <small><?php echo app('translator')->get('active'); ?></small>
                                                 </label>
                                                 <label>
                                                     <input type="radio" name="status" value="deactive"
-                                                        {{ $detail->status == 'deactive' ? 'checked' : '' }}
+                                                        <?php echo e($detail->status == 'deactive' ? 'checked' : ''); ?>
+
                                                         class="ml-15">
-                                                    <small>@lang('deactive')</small>
+                                                    <small><?php echo app('translator')->get('deactive'); ?></small>
                                                 </label>
                                             </div>
                                         </div>
@@ -177,17 +175,17 @@
                                     <div class="col-md-6">
 
                                         <div class="form-group">
-                                            <label>@lang('Is featured')</label>
+                                            <label><?php echo app('translator')->get('Is featured'); ?></label>
                                             <div class="form-control">
                                                 <label>
                                                     <input type="radio" name="is_featured" value="1"
-                                                        {{ $detail->is_featured == '1' ? 'checked' : '' }}>
-                                                    <small>@lang('true')</small>
+                                                        <?php echo e($detail->is_featured == '1' ? 'checked' : ''); ?>>
+                                                    <small><?php echo app('translator')->get('true'); ?></small>
                                                 </label>
                                                 <label>
                                                     <input type="radio" name="is_featured" value="0" class="ml-15"
-                                                        {{ $detail->is_featured == '0' ? 'checked' : '' }}>
-                                                    <small>@lang('false')</small>
+                                                        <?php echo e($detail->is_featured == '0' ? 'checked' : ''); ?>>
+                                                    <small><?php echo app('translator')->get('false'); ?></small>
                                                 </label>
                                             </div>
                                         </div>
@@ -197,52 +195,52 @@
 
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label>@lang('Image')</label>
+                                            <label><?php echo app('translator')->get('Image'); ?></label>
                                             <div class="input-group">
                                                 <span class="input-group-btn">
                                                     <a data-input="image" data-preview="image-holder"
                                                         class="btn btn-primary lfm" data-type="product">
-                                                        <i class="fa fa-picture-o"></i> @lang('choose')
+                                                        <i class="fa fa-picture-o"></i> <?php echo app('translator')->get('choose'); ?>
                                                     </a>
                                                 </span>
                                                 <input id="image" class="form-control" type="text" name="image"
-                                                    placeholder="@lang('image_link')..." value="{{ $detail->image }}">
+                                                    placeholder="<?php echo app('translator')->get('image_link'); ?>..." value="<?php echo e($detail->image); ?>">
                                             </div>
                                             <div id="image-holder" style="margin-top:15px;max-height:100px;">
-                                                @if ($detail->image != '')
-                                                    <img style="height: 5rem;" src="{{ $detail->image }}">
-                                                @endif
+                                                <?php if($detail->image != ''): ?>
+                                                    <img style="height: 5rem;" src="<?php echo e($detail->image); ?>">
+                                                <?php endif; ?>
                                             </div>
                                         </div>
 
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label>@lang('Image thumb')</label>
+                                            <label><?php echo app('translator')->get('Image thumb'); ?></label>
                                             <div class="input-group">
                                                 <span class="input-group-btn">
                                                     <a data-input="image_thumb" data-preview="image_thumb-holder"
                                                         class="btn btn-primary lfm" data-type="product">
-                                                        <i class="fa fa-picture-o"></i> @lang('choose')
+                                                        <i class="fa fa-picture-o"></i> <?php echo app('translator')->get('choose'); ?>
                                                     </a>
                                                 </span>
                                                 <input id="image_thumb" class="form-control" type="text"
-                                                    name="image_thumb" placeholder="@lang('image_link')..."
-                                                    value="{{ $detail->image_thumb }}">
+                                                    name="image_thumb" placeholder="<?php echo app('translator')->get('image_link'); ?>..."
+                                                    value="<?php echo e($detail->image_thumb); ?>">
                                             </div>
                                             <div id="image_thumb-holder" style="margin-top:15px;max-height:100px;">
-                                                @if ($detail->image_thumb != '')
-                                                    <img style="height: 5rem;" src="{{ $detail->image_thumb }}">
-                                                @endif
+                                                <?php if($detail->image_thumb != ''): ?>
+                                                    <img style="height: 5rem;" src="<?php echo e($detail->image_thumb); ?>">
+                                                <?php endif; ?>
                                             </div>
                                         </div>
                                     </div>
                                       
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label>@lang('Order')</label>
+                                            <label><?php echo app('translator')->get('Order'); ?></label>
                                             <input type="number" class="form-control" name="iorder"
-                                                placeholder="@lang('Order')" value="{{ $detail->iorder }}">
+                                                placeholder="<?php echo app('translator')->get('Order'); ?>" value="<?php echo e($detail->iorder); ?>">
                                         </div>
                                     </div>
                                     
@@ -253,16 +251,16 @@
 
                                     <div class="col-md-12">
                                         <div class="form-group">
-                                            <label>@lang('Description')</label>
-                                            <textarea name="json_params[brief][vi]" class="form-control" id="brief_vi" >{{ isset($detail->json_params->brief->vi) ? $detail->json_params->brief->vi : old('json_params[brief][vi]') }}</textarea>
+                                            <label><?php echo app('translator')->get('Description'); ?></label>
+                                            <textarea name="json_params[brief][vi]" class="form-control" id="brief_vi" ><?php echo e(isset($detail->json_params->brief->vi) ? $detail->json_params->brief->vi : old('json_params[brief][vi]')); ?></textarea>
                                         </div>
                                     </div>
 
                                     <div class="col-md-12">
                                         <div class="form-group">
                                             <div class="form-group">
-                                                <label>@lang('Content')</label>
-                                                <textarea name="json_params[content][vi]" class="form-control" id="content_vi">{{ isset($detail->json_params->content->vi) ? $detail->json_params->content->vi : old('json_params[content][vi]') }}</textarea>
+                                                <label><?php echo app('translator')->get('Content'); ?></label>
+                                                <textarea name="json_params[content][vi]" class="form-control" id="content_vi"><?php echo e(isset($detail->json_params->content->vi) ? $detail->json_params->content->vi : old('json_params[content][vi]')); ?></textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -271,23 +269,23 @@
                                     </div>
                                     <div class="col-md-12">
                                         <div class="form-group">
-                                            <label>@lang('seo_title')</label>
+                                            <label><?php echo app('translator')->get('seo_title'); ?></label>
                                             <input name="json_params[seo_title]" class="form-control"
-                                                value="{{ $detail->json_params->seo_title ?? old('json_params[seo_title]') }}">
+                                                value="<?php echo e($detail->json_params->seo_title ?? old('json_params[seo_title]')); ?>">
                                         </div>
                                     </div>
                                     <div class="col-md-12">
                                         <div class="form-group">
-                                            <label>@lang('seo_keyword')</label>
+                                            <label><?php echo app('translator')->get('seo_keyword'); ?></label>
                                             <input name="json_params[seo_keyword]" class="form-control"
-                                                value="{{ $detail->json_params->seo_keyword ?? old('json_params[seo_keyword]') }}">
+                                                value="<?php echo e($detail->json_params->seo_keyword ?? old('json_params[seo_keyword]')); ?>">
                                         </div>
                                     </div>
                                     <div class="col-md-12">
                                         <div class="form-group">
-                                            <label>@lang('seo_description')</label>
+                                            <label><?php echo app('translator')->get('seo_description'); ?></label>
                                             <input name="json_params[seo_description]" class="form-control"
-                                                value="{{ $detail->json_params->seo_description ?? old('json_params[seo_description]') }}">
+                                                value="<?php echo e($detail->json_params->seo_description ?? old('json_params[seo_description]')); ?>">
                                         </div>
                                     </div>
                                 </div>
@@ -301,18 +299,18 @@
                                                 title="Nhấn để chọn thêm ảnh" type="button" value="Thêm ảnh" />
                                         </div>
                                         <div class="row list-gallery-image">
-                                            @isset($detail->json_params->gallery_image)
-                                                @foreach ($detail->json_params->gallery_image as $key => $value)
-                                                    @if ($value != null)
+                                            <?php if(isset($detail->json_params->gallery_image)): ?>
+                                                <?php $__currentLoopData = $detail->json_params->gallery_image; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $value): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                    <?php if($value != null): ?>
                                                         <div class="col-lg-2 col-md-3 col-sm-4 mb-1 gallery-image">
-                                                            <img class="img-width" src="{{ $value }}">
+                                                            <img class="img-width" src="<?php echo e($value); ?>">
                                                             <input type="text"
-                                                                name="json_params[gallery_image][{{ $key }}]"
-                                                                class="hidden" id="gallery_image_{{ $key }}"
-                                                                value="{{ $value }}">
+                                                                name="json_params[gallery_image][<?php echo e($key); ?>]"
+                                                                class="hidden" id="gallery_image_<?php echo e($key); ?>"
+                                                                value="<?php echo e($value); ?>">
                                                             <div class="btn-action">
                                                                 <span class="btn btn-sm btn-success btn-upload lfm mr-5"
-                                                                    data-input="gallery_image_{{ $key }}">
+                                                                    data-input="gallery_image_<?php echo e($key); ?>">
                                                                     <i class="fa fa-upload"></i>
                                                                 </span>
                                                                 <span class="btn btn-sm btn-danger btn-remove">
@@ -320,9 +318,9 @@
                                                                 </span>
                                                             </div>
                                                         </div>
-                                                    @endif
-                                                @endforeach
-                                            @endisset
+                                                    <?php endif; ?>
+                                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                            <?php endif; ?>
                                         </div>
                                     </div>
                                 </div>
@@ -346,23 +344,24 @@
                                                         </tr>
                                                     </thead>
                                                     <tbody id="post_related">
-                                                        @isset($relateds)
-                                                            @foreach ($relateds as $item)
+                                                        <?php if(isset($relateds)): ?>
+                                                            <?php $__currentLoopData = $relateds; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                                                 <tr>
-                                                                    <td>{{ $item->id }}</td>
-                                                                    <td>{{ $item->title }}</td>
-                                                                    <td>{{ $item->taxonomy_title }}</td>
-                                                                    <td>{{ \Carbon\Carbon::parse($item->created_at)->format('d/m/Y') }}
+                                                                    <td><?php echo e($item->id); ?></td>
+                                                                    <td><?php echo e($item->title); ?></td>
+                                                                    <td><?php echo e($item->taxonomy_title); ?></td>
+                                                                    <td><?php echo e(\Carbon\Carbon::parse($item->created_at)->format('d/m/Y')); ?>
+
                                                                     </td>
                                                                     <td>
                                                                         <input name="json_params[related_post][]"
-                                                                            type="checkbox" value="{{ $item->id }}"
+                                                                            type="checkbox" value="<?php echo e($item->id); ?>"
                                                                             class="mr-15 related_post_item cursor"
                                                                             autocomplete="off" checked>
                                                                     </td>
                                                                 </tr>
-                                                            @endforeach
-                                                        @endisset
+                                                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                                        <?php endif; ?>
                                                     </tbody>
                                                 </table>
                                             </div><!-- /.box-body -->
@@ -377,30 +376,32 @@
                                                         <select class="form-control select2" id="search_taxonomy_id"
                                                             style="width:100%">
                                                             <option value="">- Chọn danh mục -</option>
-                                                            @foreach ($parents as $item)
-                                                                @if ($item->parent_id == 0 || $item->parent_id == null)
-                                                                    <option value="{{ $item->id }}">
-                                                                        {{ $item->title }}</option>
+                                                            <?php $__currentLoopData = $parents; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                                <?php if($item->parent_id == 0 || $item->parent_id == null): ?>
+                                                                    <option value="<?php echo e($item->id); ?>">
+                                                                        <?php echo e($item->title); ?></option>
 
-                                                                    @foreach ($parents as $sub)
-                                                                        @if ($item->id == $sub->parent_id)
-                                                                            <option value="{{ $sub->id }}">
+                                                                    <?php $__currentLoopData = $parents; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $sub): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                                        <?php if($item->id == $sub->parent_id): ?>
+                                                                            <option value="<?php echo e($sub->id); ?>">
                                                                                 - -
-                                                                                {{ $sub->title }}
+                                                                                <?php echo e($sub->title); ?>
+
                                                                             </option>
 
-                                                                            @foreach ($parents as $sub_child)
-                                                                                @if ($sub->id == $sub_child->parent_id)
-                                                                                    <option value="{{ $sub_child->id }}">
+                                                                            <?php $__currentLoopData = $parents; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $sub_child): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                                                <?php if($sub->id == $sub_child->parent_id): ?>
+                                                                                    <option value="<?php echo e($sub_child->id); ?>">
                                                                                         - - - -
-                                                                                        {{ $sub_child->title }}
+                                                                                        <?php echo e($sub_child->title); ?>
+
                                                                                     </option>
-                                                                                @endif
-                                                                            @endforeach
-                                                                        @endif
-                                                                    @endforeach
-                                                                @endif
-                                                            @endforeach
+                                                                                <?php endif; ?>
+                                                                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                                                        <?php endif; ?>
+                                                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                                                <?php endif; ?>
+                                                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                                         </select>
                                                     </div>
                                                     <div class="input-group col-md-6">
@@ -443,18 +444,18 @@
                 <!-- /.box-body -->
 
                 <div class="box-footer">
-                    <a class="btn btn-success btn-sm" href="{{ route(Request::segment(2) . '.index') }}">
-                        <i class="fa fa-bars"></i> @lang('List')
+                    <a class="btn btn-success btn-sm" href="<?php echo e(route(Request::segment(2) . '.index')); ?>">
+                        <i class="fa fa-bars"></i> <?php echo app('translator')->get('List'); ?>
                     </a>
                     <button type="submit" class="btn btn-primary pull-right btn-sm"><i class="fa fa-floppy-o"></i>
-                        @lang('Save')</button>
+                        <?php echo app('translator')->get('Save'); ?></button>
                 </div>
             </form>
         </div>
     </section>
-@endsection
+<?php $__env->stopSection(); ?>
 
-@section('script')
+<?php $__env->startSection('script'); ?>
     <script>
         CKEDITOR.replace('content_vi', ck_options);
         CKEDITOR.replace('brief_vi', ck_options);
@@ -472,7 +473,7 @@
                     checked_post.push($(this).val());
                 });
 
-                let url = "{{ route('cms_posts.search') }}/";
+                let url = "<?php echo e(route('cms_posts.search')); ?>/";
                 $.ajax({
                     type: "GET",
                     url: url,
@@ -480,8 +481,8 @@
                         keyword: keyword,
                         taxonomy_id: taxonomy_id,
                         other_list: checked_post,
-                        different_id: {{ $detail->id }},
-                        is_type: "{{ App\Consts::POST_TYPE['product'] }}"
+                        different_id: <?php echo e($detail->id); ?>,
+                        is_type: "<?php echo e(App\Consts::POST_TYPE['product']); ?>"
                     },
                     success: function(response) {
                         if (response.message == 'success') {
@@ -534,13 +535,13 @@
             $(".btn_add_tags").click(function() {
                 var tags = $("#tags_title").val();
                 if (tags.trim() == '') return;
-                var _url = "{{ route('cms_posts.add_tag') }}";
+                var _url = "<?php echo e(route('cms_posts.add_tag')); ?>";
                 $.ajax({
                     type: "POST",
                     url: _url,
                     data: {
                         tags: tags,
-                        _token: "{{ csrf_token() }}"
+                        _token: "<?php echo e(csrf_token()); ?>"
                     },
                     cache: false,
                     context: document.body,
@@ -578,7 +579,7 @@
                 }
             });
 
-            var no_image_link = '{{ url('themes/admin/img/no_image.jpg') }}';
+            var no_image_link = '<?php echo e(url('themes/admin/img/no_image.jpg')); ?>';
 
             $('.add-gallery-image').click(function(event) {
                 let keyRandom = new Date().getTime();
@@ -616,7 +617,7 @@
 
             // Delete image
             $('.list-gallery-image').on('click', '.btn-remove', function() {
-                // if (confirm("@lang('confirm_action')")) {
+                // if (confirm("<?php echo app('translator')->get('confirm_action'); ?>")) {
                 let _root = $(this).closest('.gallery-image');
                 _root.remove();
                 // }
@@ -656,4 +657,6 @@
             });
         });
     </script>
-@endsection
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('admin.layouts.app', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH D:\FHM\FHM-AutoCar-BE\resources\views/admin/pages/cms_products/edit.blade.php ENDPATH**/ ?>

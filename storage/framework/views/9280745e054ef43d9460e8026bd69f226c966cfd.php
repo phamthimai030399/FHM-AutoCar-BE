@@ -1,5 +1,5 @@
-@if ($block)
-    @php
+<?php if($block): ?>
+    <?php
         $title = $block->json_params->title->{$locale} ?? $block->title;
         $brief = $block->json_params->brief->{$locale} ?? $block->brief;
         $content = $block->json_params->content->{$locale} ?? $block->content;
@@ -19,16 +19,16 @@
         $block_childs = $blocks->filter(function ($item, $key) use ($block) {
             return $item->parent_id == $block->id;
         });
-    @endphp
+    ?>
     <style>
         .banner {
-            background: url({{ $image_background }}) no-repeat center center;
+            background: url(<?php echo e($image_background); ?>) no-repeat center center;
             background-size: cover;
         }
 
         @media (min-width: 768px) {
             .banner {
-                background: url({{ $image }}) no-repeat center center;
+                background: url(<?php echo e($image); ?>) no-repeat center center;
             }
         }
     </style>
@@ -37,13 +37,16 @@
             <div class="banner-content">
                 <a href="" class="btn-best-price text-uppercase text-center">best price</a>
                 <div class="mt-3 service">
-                    {{ $brief }}
+                    <?php echo e($brief); ?>
+
                 </div>
                 <p class="mt-3">
-                    {{ $content }}
+                    <?php echo e($content); ?>
+
                 </p>
-                <a href="" class="btn-shop-now text-uppercase text-center mt-md-4 mt-3 d-inline-flex">{{ $url_link_title }}</a>
+                <a href="" class="btn-shop-now text-uppercase text-center mt-md-4 mt-3 d-inline-flex"><?php echo e($url_link_title); ?></a>
             </div>
         </div>
     </div>
-@endif
+<?php endif; ?>
+<?php /**PATH D:\FHM\FHM-AutoCar-BE\resources\views/frontend/blocks/banner/styles/banner_image.blade.php ENDPATH**/ ?>

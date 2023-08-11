@@ -7,6 +7,8 @@
   "pending": "Đang chờ",
   "active": "Đang hoạt động",
   "deactive": "Không hoạt động",
+  "Button": "Button",
+  "Link button": "Liên kết điều hướng button",
   "delete": "Đã xóa",
   "post_category": "Danh mục bài viết",
   "service_category": "Danh mục dịch vụ",
