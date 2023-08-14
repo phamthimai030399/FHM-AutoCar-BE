@@ -125,12 +125,31 @@
                                                         value="<?php echo e($detail->json_params->price_old ?? old('json_params[price_old]')); ?>">
                                         </div>
                                     </div>
+
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label><?php echo app('translator')->get('Discount price'); ?></label>
                                                     <input type="text" class="form-control" name="json_params[price]"
                                                         placeholder="<?php echo app('translator')->get('Discount price'); ?>"
                                                         value="<?php echo e($detail->json_params->price ?? old('json_params[price]')); ?>">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label><?php echo app('translator')->get('Button'); ?></label>
+                                                    <input type="text" class="form-control" name="json_params[button]"
+                                                        placeholder="<?php echo app('translator')->get('Button'); ?>"
+                                                        value="<?php echo e($detail->json_params->button ?? old('json_params[button]')); ?>">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label><?php echo app('translator')->get('Link button'); ?></label>
+                                                    <input type="text" class="form-control" name="json_params[url_link_button]"
+                                                        placeholder="<?php echo app('translator')->get('Link button'); ?>"
+                                                        value="<?php echo e($detail->json_params->url_link_button ?? old('json_params[url_link_button]')); ?>">
                                         </div>
                                     </div>
 
@@ -185,6 +204,25 @@
                                                 <label>
                                                     <input type="radio" name="is_featured" value="0" class="ml-15"
                                                         <?php echo e($detail->is_featured == '0' ? 'checked' : ''); ?>>
+                                                    <small><?php echo app('translator')->get('false'); ?></small>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="col-md-6">
+
+                                        <div class="form-group">
+                                            <label><?php echo app('translator')->get('Is sale 25%'); ?></label>
+                                            <div class="form-control">
+                                                <label>
+                                                    <input type="radio" name="is_sale" value="1"
+                                                        <?php echo e($detail->is_sale == '1' ? 'checked' : ''); ?>>
+                                                    <small><?php echo app('translator')->get('true'); ?></small>
+                                                </label>
+                                                <label>
+                                                    <input type="radio" name="is_sale" value="0" class="ml-15"
+                                                        <?php echo e($detail->is_sale == '0' ? 'checked' : ''); ?>>
                                                     <small><?php echo app('translator')->get('false'); ?></small>
                                                 </label>
                                             </div>

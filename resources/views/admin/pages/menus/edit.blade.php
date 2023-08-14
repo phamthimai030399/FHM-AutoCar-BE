@@ -615,19 +615,6 @@
 
                                                                             </div>
                                                                             <div class="form-group">
-                                                                                <label for="icon"
-                                                                                    class="control-label">
-                                                                                    @lang('Icon')
-                                                                                </label>
-
-                                                                                <input type="text" class="form-control"
-                                                                                    id="link-name"
-                                                                                    placeholder="@lang('Icon')"
-                                                                                    name="json_params[icon]" 
-                                                                                    autocomplete="off">
-
-                                                                            </div>
-                                                                            <div class="form-group">
                                                                                 <label for="link-url_link"
                                                                                     class="control-label">
                                                                                     @lang('Url')
@@ -753,18 +740,6 @@
                                                                                         v-pre="" name="name"
                                                                                         type="text"
                                                                                         value="{{ $item->name }}">
-                                                                                </div>
-                                                                                <div class="form-group mb-3">
-                                                                                    <label for="menu-node-title-1"
-                                                                                        class="control-label"
-                                                                                        data-update="icon">@lang('Icon')</label>
-                                                                                    <input class="form-control"
-                                                                                        placeholder="Icon"
-                                                                                        data-old="Home"
-                                                                                        id="menu-node-title-1"
-                                                                                        v-pre="" name="json_params[icon]"
-                                                                                        type="text"
-                                                                                        value="{{ $item->json_params->icon }}">
                                                                                 </div>
                                                                                 <div class="form-group mb-3">   
                                                                                     <label for="menu-node-url-1"

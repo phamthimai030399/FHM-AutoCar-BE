@@ -622,19 +622,6 @@
 
                                                                             </div>
                                                                             <div class="form-group">
-                                                                                <label for="icon"
-                                                                                    class="control-label">
-                                                                                    <?php echo app('translator')->get('Icon'); ?>
-                                                                                </label>
-
-                                                                                <input type="text" class="form-control"
-                                                                                    id="link-name"
-                                                                                    placeholder="<?php echo app('translator')->get('Icon'); ?>"
-                                                                                    name="json_params[icon]" 
-                                                                                    autocomplete="off">
-
-                                                                            </div>
-                                                                            <div class="form-group">
                                                                                 <label for="link-url_link"
                                                                                     class="control-label">
                                                                                     <?php echo app('translator')->get('Url'); ?>
@@ -759,18 +746,6 @@
                                                                                         v-pre="" name="name"
                                                                                         type="text"
                                                                                         value="<?php echo e($item->name); ?>">
-                                                                                </div>
-                                                                                <div class="form-group mb-3">
-                                                                                    <label for="menu-node-title-1"
-                                                                                        class="control-label"
-                                                                                        data-update="icon"><?php echo app('translator')->get('Icon'); ?></label>
-                                                                                    <input class="form-control"
-                                                                                        placeholder="Icon"
-                                                                                        data-old="Home"
-                                                                                        id="menu-node-title-1"
-                                                                                        v-pre="" name="json_params[icon]"
-                                                                                        type="text"
-                                                                                        value="<?php echo e($item->json_params->icon); ?>">
                                                                                 </div>
                                                                                 <div class="form-group mb-3">   
                                                                                     <label for="menu-node-url-1"

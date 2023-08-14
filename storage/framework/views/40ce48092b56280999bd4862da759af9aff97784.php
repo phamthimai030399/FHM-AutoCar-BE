@@ -253,17 +253,17 @@
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label><?php echo app('translator')->get('Button'); ?></label>
-                                            <input type="text" class="form-control" name="button"
+                                            <input type="text" class="form-control" name="json_params[button]"
                                                 placeholder="<?php echo app('translator')->get('Button'); ?>"
-                                                value="<?php echo e(old('icon') ?? $detail->button); ?>">
+                                                value="<?php echo e(old('json_params[button]') ?? $detail->json_params->button); ?>">
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label><?php echo app('translator')->get('Url button'); ?></label>
-                                            <input type="text" class="form-control" name="url_link_button"
-                                                placeholder="<?php echo app('translator')->get('Url button'); ?>"
-                                                value="<?php echo e(old('url_link_button') ?? $detail->url_link_button); ?>">
+                                            <label><?php echo app('translator')->get('Link button'); ?></label>
+                                            <input type="text" class="form-control" name="json_params[url_link_button]"
+                                                placeholder="<?php echo app('translator')->get('Link button'); ?>"
+                                                value="<?php echo e(old('json_params[url_link_button]') ?? $detail->json_params->url_link_button); ?>">
                                         </div>
                                     </div>
                                     <div class="col-md-6">

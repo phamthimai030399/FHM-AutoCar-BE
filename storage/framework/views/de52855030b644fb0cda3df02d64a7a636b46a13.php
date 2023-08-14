@@ -35,7 +35,7 @@
                     <p class="f-w-500" style="padding: 0px">
                         <?php echo e($web_information->information->brief); ?>
 
-                        <a href="" class="text-decoration-underline" style="font-weight: 500">Shop now!</a>
+                        <a href="" class="text-decoration-underline" style="font-weight: 500"><?php echo e($web_information->information->button_shop_now); ?>!</a>
                     </p>
                 </div>
                 <div class="item-support d-none d-lg-flex">

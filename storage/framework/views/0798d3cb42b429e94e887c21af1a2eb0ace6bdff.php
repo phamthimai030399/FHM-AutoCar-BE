@@ -14,9 +14,9 @@
         $params['status'] = App\Consts::TAXONOMY_STATUS['active'];
         $params['taxonomy'] = App\Consts::TAXONOMY['product'];
         $params['is_type'] = App\Consts::TAXONOMY['product'];
+        $params['is_sale'] = true;
         $taxonomys = App\Http\Services\ContentService::getCmsTaxonomy($params)->get();
         $rows = App\Http\Services\ContentService::getCmsPost($params)->get();
-        // dd($rows);
     ?>
 
     <div class="product-popular">

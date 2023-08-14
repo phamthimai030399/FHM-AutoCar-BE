@@ -185,6 +185,9 @@ class ContentService
                     return $query->where('tb_cms_posts.taxonomy_id', $params['taxonomy_id']);
                 }
             })
+            ->when(!empty($params['is_sale']), function ($query) use ($params) {
+                return $query->where('tb_cms_posts.is_sale', '=', $params['is_sale']);
+            })
             ->when(!empty($params['is_featured']), function ($query) use ($params) {
                 return $query->where('tb_cms_posts.is_featured', $params['is_featured']);
             })

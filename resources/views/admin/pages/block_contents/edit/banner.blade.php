@@ -246,17 +246,17 @@
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label>@lang('Button')</label>
-                                            <input type="text" class="form-control" name="button"
+                                            <input type="text" class="form-control" name="json_params[button]"
                                                 placeholder="@lang('Button')"
-                                                value="{{ old('icon') ?? $detail->button }}">
+                                                value="{{ old('json_params[button]') ?? $detail->json_params->button }}">
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label>@lang('Url button')</label>
-                                            <input type="text" class="form-control" name="url_link_button"
-                                                placeholder="@lang('Url button')"
-                                                value="{{ old('url_link_button') ?? $detail->url_link_button }}">
+                                            <label>@lang('Link button')</label>
+                                            <input type="text" class="form-control" name="json_params[url_link_button]"
+                                                placeholder="@lang('Link button')"
+                                                value="{{ old('json_params[url_link_button]') ?? $detail->json_params->url_link_button }}">
                                         </div>
                                     </div>
                                     <div class="col-md-6">

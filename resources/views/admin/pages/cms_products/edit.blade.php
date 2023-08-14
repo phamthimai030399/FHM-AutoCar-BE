@@ -128,12 +128,31 @@
                                                         value="{{ $detail->json_params->price_old ?? old('json_params[price_old]') }}">
                                         </div>
                                     </div>
+
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label>@lang('Discount price')</label>
                                                     <input type="text" class="form-control" name="json_params[price]"
                                                         placeholder="@lang('Discount price')"
                                                         value="{{ $detail->json_params->price ?? old('json_params[price]') }}">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>@lang('Button')</label>
+                                                    <input type="text" class="form-control" name="json_params[button]"
+                                                        placeholder="@lang('Button')"
+                                                        value="{{ $detail->json_params->button ?? old('json_params[button]') }}">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>@lang('Link button')</label>
+                                                    <input type="text" class="form-control" name="json_params[url_link_button]"
+                                                        placeholder="@lang('Link button')"
+                                                        value="{{ $detail->json_params->url_link_button ?? old('json_params[url_link_button]') }}">
                                         </div>
                                     </div>
 
@@ -187,6 +206,25 @@
                                                 <label>
                                                     <input type="radio" name="is_featured" value="0" class="ml-15"
                                                         {{ $detail->is_featured == '0' ? 'checked' : '' }}>
+                                                    <small>@lang('false')</small>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="col-md-6">
+
+                                        <div class="form-group">
+                                            <label>@lang('Is sale 25%')</label>
+                                            <div class="form-control">
+                                                <label>
+                                                    <input type="radio" name="is_sale" value="1"
+                                                        {{ $detail->is_sale == '1' ? 'checked' : '' }}>
+                                                    <small>@lang('true')</small>
+                                                </label>
+                                                <label>
+                                                    <input type="radio" name="is_sale" value="0" class="ml-15"
+                                                        {{ $detail->is_sale == '0' ? 'checked' : '' }}>
                                                     <small>@lang('false')</small>
                                                 </label>
                                             </div>

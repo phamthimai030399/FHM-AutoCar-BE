@@ -7,6 +7,7 @@
         $image = $block->image != '' ? $block->image : null;
         $url_link = $block->url_link != '' ? $block->url_link : '';
         $url_link_title = $block->json_params->url_link_title->{$locale} ?? $block->url_link_title;
+        $button = $block->json_params->button ?? $block->button;
         $style = isset($block->json_params->style) && $block->json_params->style == 'slider-caption-right' ? 'd-none' : '';
         
         // $image_for_screen = null;
@@ -15,10 +16,6 @@
         // } else {
         //     $image_for_screen = $image;
         // }
-        
-        $block_childs = $blocks->filter(function ($item, $key) use ($block) {
-            return $item->parent_id == $block->id;
-        });
     @endphp
     <style>
         .banner {
@@ -35,14 +32,15 @@
     <div class="banner">
         <div class="container">
             <div class="banner-content">
-                <a href="" class="btn-best-price text-uppercase text-center">best price</a>
+                <a href="" class="btn-best-price text-uppercase text-center">{{ $url_link_title }}</a>
                 <div class="mt-3 service">
                     {{ $brief }}
                 </div>
                 <p class="mt-3">
                     {{ $content }}
                 </p>
-                <a href="" class="btn-shop-now text-uppercase text-center mt-md-4 mt-3 d-inline-flex">{{ $url_link_title }}</a>
+                <a href=""
+                    class="btn-shop-now text-uppercase text-center mt-md-4 mt-3 d-inline-flex">{{ $button }}</a>
             </div>
         </div>
     </div>
