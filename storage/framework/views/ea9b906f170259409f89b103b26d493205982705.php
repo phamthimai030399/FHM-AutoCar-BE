@@ -1,5 +1,5 @@
-@if ($block)
-    @php
+<?php if($block): ?>
+    <?php
         
         $title = $block->json_params->title->{$locale} ?? $block->title;
         $brief = $block->json_params->brief->{$locale} ?? $block->brief;
@@ -20,27 +20,31 @@
             return $item->parent_id == $block->id;
         });
         
-    @endphp
+    ?>
 
     <div class="row m-0 subscription-new-offe">
-        <div class="col-12 col-md-6 subscription-new-offe-right" style="background: url({{ $image }});background-size: cover;"></div>
+        <div class="col-12 col-md-6 subscription-new-offe-right" style="background: url(<?php echo e($image); ?>);background-size: cover;"></div>
         <div class="col-12 col-md-6 subscription-new-offe-left">
             <div class="title">
-                <span class="title-top">{{ $url_link_title }}</span>
-                <span class="title-bottom"> {{ $brief }} </span>
-                {!! $content !!}
+                <span class="title-top"><?php echo e($title); ?></span>
+                <span class="title-bottom"> <?php echo e($brief); ?> </span>
+                <?php echo $content; ?>
+
             </div>
             <div class="form-send-mail" style="margin-top: 30px;">
                 <div class="input-group">
                     <span class="input-group-text" id="basic-addon1">
-                        {!! $icon !!}
+                        <?php echo $icon; ?>
+
                     </span>
                     <input type="text" class="form-control ps-0" placeholder="Your Email..." />
                     <button class="btn btn-outline-secondary py-3" type="button">
-                        Subscribe
+                        <?php echo e($url_link_title); ?>
+
                     </button>
                 </div>
             </div>
         </div>
     </div>
-@endif
+<?php endif; ?>
+<?php /**PATH D:\FHM\FHM-AutoCar-BE\resources\views/frontend/blocks/form/styles/subscription_new_offe.blade.php ENDPATH**/ ?>

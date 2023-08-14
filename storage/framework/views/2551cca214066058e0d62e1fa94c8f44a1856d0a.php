@@ -1,5 +1,5 @@
-@if ($block)
-  @php
+<?php if($block): ?>
+  <?php
     $title = $block->json_params->title->{$locale} ?? $block->title;
     $brief = $block->json_params->brief->{$locale} ?? $block->brief;
     $content = $block->json_params->content->{$locale} ?? $block->content;
@@ -8,26 +8,27 @@
     $url_link = $block->url_link != '' ? $block->url_link : '';
     $url_link_title = $block->json_params->url_link_title->{$locale} ?? $block->url_link_title;
     
-  @endphp
+  ?>
 
   <section id="box_form" class="mb-5 pt-lg-5">
     <div class="box_title text-center mb-3 mb-lg-5">
-      <h2 class="title text-uppercase">{{$title}}</h2>
+      <h2 class="title text-uppercase"><?php echo e($title); ?></h2>
       <p class="bref">
-        {{$brief}}
+        <?php echo e($brief); ?>
+
       </p>
     </div>
     <div class="bg_grey p-3 p-lg-5">
-      <div class="box_bg d-flex justify-content-end" style="background: url({{$background}});background-size:  100% 100% ;background-repeat:  no-repeat">
+      <div class="box_bg d-flex justify-content-end" style="background: url(<?php echo e($background); ?>);background-size:  100% 100% ;background-repeat:  no-repeat">
         <div class="frame_form col-12 col-lg-7">
-          <form class="form_ajax" action="{{ route('frontend.contact.store') }}" method="post">
-            @csrf
+          <form class="form_ajax" action="<?php echo e(route('frontend.contact.store')); ?>" method="post">
+            <?php echo csrf_field(); ?>
             <input type="hidden" name="is_type" value="call_request">
             <div class="row bd_bottom justify-content-between">
               <div class="col-12 col-sm-5">
                 <div class="form-group row align-items-center mb-lg-4">
                   <label for="height" class="col-sm-5 col-form-label"
-                    >@lang('Chều cao(Cm)')</label
+                    ><?php echo app('translator')->get('Chều cao(Cm)'); ?></label
                   >
                   <div class="col-11 col-sm-6">
                     <input
@@ -43,7 +44,7 @@
                 </div>
                 <div class="form-group row align-items-center mb-lg-4">
                   <label for="weight" class="col-sm-5 col-form-label"
-                    >@lang('Cân nặng(Kg)')</label
+                    ><?php echo app('translator')->get('Cân nặng(Kg)'); ?></label
                   >
                   <div class="col-11 col-sm-6">
                     <input
@@ -59,7 +60,7 @@
                 </div>
                 <div class="form-group row align-items-center mb-lg-4">
                   <label for="gender" class="col-sm-5 col-form-label"
-                    >@lang('Giới tính')</label
+                    ><?php echo app('translator')->get('Giới tính'); ?></label
                   >
                   <div class="col-11 col-sm-6">
                     <select
@@ -67,16 +68,16 @@
                       id="gender"
                       class="form-control"
                     >
-                      <option value="">@lang('Please select')</option>
-                      <option value="male">@lang('Male')</option>
-                      <option value="female">@lang('Female')</option>
+                      <option value=""><?php echo app('translator')->get('Please select'); ?></option>
+                      <option value="male"><?php echo app('translator')->get('Male'); ?></option>
+                      <option value="female"><?php echo app('translator')->get('Female'); ?></option>
                     </select>
                   </div>
                   <i class="far fa-check-circle"></i>
                 </div>
                 <div class="form-group row align-items-center mb-lg-4">
                   <label for="year" class="col-sm-5 col-form-label"
-                    >@lang('Năm sinh')</label
+                    ><?php echo app('translator')->get('Năm sinh'); ?></label
                   >
                   <div class="col-11 col-sm-6">
                     <input
@@ -94,7 +95,7 @@
               <div class="col-12 col-sm-6">
                 <div class="form-group row align-items-center mb-lg-4">
                   <label for="height" class="col-sm-6 col-form-label"
-                    >@lang('Bạn từng học Yoga')</label
+                    ><?php echo app('translator')->get('Bạn từng học Yoga'); ?></label
                   >
                   <div class="col-11 col-sm-4">
                     <select
@@ -102,9 +103,9 @@
                       
                       class="form-control"
                     >
-                      <option value="">@lang('Please select')</option>
-                      <option value="yes">@lang('Yes')</option>
-                      <option value="no">@lang('No')</option>
+                      <option value=""><?php echo app('translator')->get('Please select'); ?></option>
+                      <option value="yes"><?php echo app('translator')->get('Yes'); ?></option>
+                      <option value="no"><?php echo app('translator')->get('No'); ?></option>
                     </select>
                   </div>
                   <i class="far fa-check-circle"></i>
@@ -119,41 +120,41 @@
                       
                       class="form-control"
                     >
-                      <option value="">@lang('Please select')</option>
-                      <option value="yes">@lang('Yes')</option>
-                      <option value="no">@lang('No')</option>
+                      <option value=""><?php echo app('translator')->get('Please select'); ?></option>
+                      <option value="yes"><?php echo app('translator')->get('Yes'); ?></option>
+                      <option value="no"><?php echo app('translator')->get('No'); ?></option>
                     </select>
                   </div>
                   <i class="far fa-check-circle"></i>
                 </div>
                 <div class="form-group row align-items-center mb-lg-4">
                   <label for="gender" class="col-sm-6 col-form-label"
-                    >@lang('Bạn có gặp bệnh lý')</label
+                    ><?php echo app('translator')->get('Bạn có gặp bệnh lý'); ?></label
                   >
                   <div class="col-11 col-sm-4">
                     <select
                       name="json_params[is_sick]"
                       class="form-control"
                     >
-                      <option value="">@lang('Please select')</option>
-                      <option value="yes">@lang('Yes')</option>
-                      <option value="no">@lang('No')</option>
+                      <option value=""><?php echo app('translator')->get('Please select'); ?></option>
+                      <option value="yes"><?php echo app('translator')->get('Yes'); ?></option>
+                      <option value="no"><?php echo app('translator')->get('No'); ?></option>
                     </select>
                   </div>
                   <i class="far fa-check-circle"></i>
                 </div>
                 <div class="form-group row align-items-center mb-lg-4">
                   <label for="year" class="col-sm-6 col-form-label"
-                    >@lang('Thời gian tập TB/giờ')</label
+                    ><?php echo app('translator')->get('Thời gian tập TB/giờ'); ?></label
                   >
                   <div class="col-11 col-sm-4">
                     <select
                       name="json_params[time]"
                       class="form-control"
                     >
-                      <option value="">@lang('Please select')</option>
-                      <option value="yes">@lang('Yes')</option>
-                      <option value="no">@lang('No')</option>
+                      <option value=""><?php echo app('translator')->get('Please select'); ?></option>
+                      <option value="yes"><?php echo app('translator')->get('Yes'); ?></option>
+                      <option value="no"><?php echo app('translator')->get('No'); ?></option>
                     </select>
                   </div>
                   <i class="far fa-check-circle"></i>
@@ -162,7 +163,8 @@
             </div>
             <hr class="line" />
             <p class="device-width">
-              {!!$content!!}
+              <?php echo $content; ?>
+
             </p>
             <div class="form-group row">
               <div class="form-group col-12 col-sm-5">
@@ -194,4 +196,5 @@
       </div>
     </div>
   </section>
-@endif
+<?php endif; ?>
+<?php /**PATH D:\FHM\FHM-AutoCar-BE\resources\views/frontend/blocks/form/styles/booking.blade.php ENDPATH**/ ?>
