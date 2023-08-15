@@ -114,6 +114,23 @@
                         value="<?php echo e($detail->title); ?>" required>
                     </div>
                   </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                        <label><?php echo app('translator')->get('Button'); ?></label>
+                                <input type="text" class="form-control" name="json_params[button]"
+                                    placeholder="<?php echo app('translator')->get('Button'); ?>"
+                                    value="<?php echo e($detail->json_params->button ?? old('json_params[button]')); ?>">
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label><?php echo app('translator')->get('Link button'); ?></label>
+                                <input type="text" class="form-control" name="json_params[url_link_button]"
+                                    placeholder="<?php echo app('translator')->get('Link button'); ?>"
+                                    value="<?php echo e($detail->json_params->url_link_button ?? old('json_params[url_link_button]')); ?>">
+                    </div>
+                </div>
                   <div class="col-md-4">
                     <div class="form-group">
                       <label><?php echo app('translator')->get('Status'); ?></label>

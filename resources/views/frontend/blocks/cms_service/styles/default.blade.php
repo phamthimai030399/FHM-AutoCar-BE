@@ -63,8 +63,8 @@
                                             @endif
                                 @endif
                                 <div class="content">
-                                    @if (!empty($url_link_child))
-                                        <span class="top-content">{{ $url_link_child }}</span>
+                                    @if (!empty($content_child))
+                                        <span class="top-content">{{ $content_child }}</span>
                                         <span class="bottom-content">{{ $title_child }}</span>
                                     @else
                                         <span>{{ $title_child }}</span>
@@ -73,7 +73,7 @@
                                         {{ $brief_child }}
                                     </p>
                                     <div class="button-learn-more">
-                                        <button>Learn More</button>
+                                        <button>{{$url_link_title_child}}</button>
                                     </div>
                                 </div>
                                 </div>

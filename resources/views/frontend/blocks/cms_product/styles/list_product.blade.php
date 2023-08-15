@@ -38,9 +38,9 @@
                                         $title_top = $item->json_params->title_top->{$locale} ?? $item->title_top;
                                         $brief = $item->json_params->brief->{$locale} ?? $item->brief;
                                         $price = $item->json_params->price ?? null;
+                                        $button = $item->json_params->button ?? $block->button;
                                         $price_old = $item->json_params->price_old ?? null;
                                         $image = $item->image_thumb != '' ? $item->image_thumb : ($item->image != '' ? $item->image : null);
-                                        // Viet ham xu ly lay slug
                                         $alias_category = App\Helpers::generateRoute(App\Consts::TAXONOMY['product'], $item->taxonomy_title, $item->taxonomy_id);
                                         $alias = App\Helpers::generateRoute(App\Consts::TAXONOMY['product'], $title, $item->id, 'detail', $item->taxonomy_title);
                                     @endphp
@@ -76,7 +76,7 @@
                                     <path
                                         d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l1.313 7h8.17l1.313-7H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z" />
                                 </svg>
-                                <span> Add to Cart </span>
+                                <span> {{ $button }} </span>
                             </button>
                         </div>
                     </div>

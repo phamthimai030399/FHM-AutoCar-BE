@@ -63,8 +63,8 @@
                                             <?php endif; ?>
                                 <?php endif; ?>
                                 <div class="content">
-                                    <?php if(!empty($url_link_child)): ?>
-                                        <span class="top-content"><?php echo e($url_link_child); ?></span>
+                                    <?php if(!empty($content_child)): ?>
+                                        <span class="top-content"><?php echo e($content_child); ?></span>
                                         <span class="bottom-content"><?php echo e($title_child); ?></span>
                                     <?php else: ?>
                                         <span><?php echo e($title_child); ?></span>
@@ -74,7 +74,7 @@
 
                                     </p>
                                     <div class="button-learn-more">
-                                        <button>Learn More</button>
+                                        <button><?php echo e($url_link_title_child); ?></button>
                                     </div>
                                 </div>
                                 </div>

@@ -109,6 +109,23 @@
                         value="{{ $detail->title }}" required>
                     </div>
                   </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                        <label>@lang('Button')</label>
+                                <input type="text" class="form-control" name="json_params[button]"
+                                    placeholder="@lang('Button')"
+                                    value="{{ $detail->json_params->button ?? old('json_params[button]') }}">
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>@lang('Link button')</label>
+                                <input type="text" class="form-control" name="json_params[url_link_button]"
+                                    placeholder="@lang('Link button')"
+                                    value="{{ $detail->json_params->url_link_button ?? old('json_params[url_link_button]') }}">
+                    </div>
+                </div>
                   <div class="col-md-4">
                     <div class="form-group">
                       <label>@lang('Status')</label>
